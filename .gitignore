@@ -4,6 +4,9 @@
 # Python
 __pycache__
 
+# React
+node_modules
+
 # Project
 */database.json
 
