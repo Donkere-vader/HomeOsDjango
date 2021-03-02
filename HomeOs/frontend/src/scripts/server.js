@@ -38,7 +38,13 @@ function get(url, user_data, handler) {
         data,
         function(data) {
             if ('error' in data) {
-                alert(data['error']);
+                if ('error_action' in data) {
+                    var action = data['error_action'];
+
+                    if (action === 'redirect') {
+                        window.location = data['error_data']['redirect'];
+                    }
+                }
             }
 
             handler(data);

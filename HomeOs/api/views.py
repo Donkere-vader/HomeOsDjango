@@ -54,7 +54,7 @@ def devices(request):
 
         return json_response(devices)
 
-    return json_response({"error": "You are not logged in"})
+    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
 
 def dev(request):
@@ -82,7 +82,7 @@ def dev(request):
                 ))
             return json_response({"error": "Unknown device"})
 
-        return json_response({"error": "You are not logged in"})
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
     elif request.method == "POST":
         username = request.POST['auth_username']
         key = request.POST['auth_key']
@@ -102,7 +102,7 @@ def dev(request):
 
             return json_response({"error": "Unknown device"})
 
-        return json_response({"error": "You are not logged in"})
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
 
 def global_programs(request):
@@ -119,7 +119,7 @@ def global_programs(request):
 
         return json_response(programs)
 
-    return json_response({"error": "You are not logged in"})
+    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
 
 def program(request):
@@ -132,7 +132,7 @@ def program(request):
 
         return json_response(p.serialize())
 
-    return json_response({"error": "You are not logged in"})
+    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
 
 def events(request):
@@ -151,7 +151,7 @@ def events(request):
 
         return json_response(events)
 
-    return json_response({"error": "You are not logged in"})
+    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
 
 def event(request):
@@ -168,4 +168,4 @@ def event(request):
 
         return json_response({"error": "Unknown event"})
 
-    return json_response({"error": "You are not logged in"})
+    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
