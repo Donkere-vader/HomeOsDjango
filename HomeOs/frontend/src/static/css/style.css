@@ -1,0 +1,17 @@
+main {
+    padding: 10px 50px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #424242;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}

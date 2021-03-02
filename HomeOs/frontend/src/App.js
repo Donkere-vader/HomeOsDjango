@@ -7,7 +7,8 @@ import {
 } from "react-router-dom";
 
 // Pages
-import Index from './pages/index.js';
+import Index from './pages/index';
+import Device from './pages/device'
 
 // Components
 import Header from './components/header.js';
@@ -21,6 +22,9 @@ function App() {
     <Router>
       <Header />
       <Switch>
+        {/* Dynamic routes */}
+        <Route path="/dev/:device_id" component={ Device } />
+
         {/* Index */}
         <Route path="/" component={ Index } />
       </Switch>

@@ -1,0 +1,107 @@
+/* Device card */
+.card.device_card {
+    cursor: pointer;
+}
+
+.device_card .device_icon, .device_page .device_icon {
+    border-radius: 10px 10px 0px 0px;
+    border-bottom: 1px solid #424242;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+}
+
+.device_page .device_icon {
+    height: 150px;
+}
+
+.device_card .device_icon img {
+    height: 60px;
+}
+
+.device_page .device_icon img {
+    height: 100px;
+}
+
+.device_card .device_info,
+.device_page .device_info,
+.device_page .device_control {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 3px;
+}
+
+.device_page .device_control {
+    gap: 15px;
+}
+
+.device_card .device_info .device_active,
+.device_page .device_info .device_active {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    gap: 5px;
+    font-size: 15px;
+}
+
+.device_card .device_info .device_active .device_active_circle,
+.device_page .device_info .device_active .device_active_circle {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+}
+
+.device_page .device_power_button {
+    border-radius: 3px;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.color_picker {
+    display: flex;
+    gap: 10px;
+}
+
+.color_picker_button {
+    border: none;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.color_picker_button img {
+    height: 40px;
+}
+
+.program_picker {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.program_picker_button {
+    border-radius: 3px;
+    border: 1px solid #424242;
+    background: none;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.program_picker_button.active {
+    color: #212121;
+    background-color: #8bc34a;
+    border: none;
+}
