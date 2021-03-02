@@ -50,6 +50,7 @@ class Device extends Component {
                     description: data['description'],
                     color: data['color'],
                     iconObj: getIcon(data['icon'], "white"),
+                    activeProgram: data['active_program'],
                 });
 
                 device.getProgramsInfo(data['programs']);
@@ -178,6 +179,7 @@ class Device extends Component {
                         </div>
                     </div>
                 </div>
+                <div style={{height: "50px"}}></div>
             </main>
         )
     }

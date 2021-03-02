@@ -75,6 +75,7 @@ def dev(request):
                     "active",
                     "color",
                     "icon",
+                    "active_program",
                 ]
             ))
         return json_response({"error": "Unknown device"})

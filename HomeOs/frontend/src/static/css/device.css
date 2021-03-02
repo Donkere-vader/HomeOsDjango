@@ -3,6 +3,10 @@
     cursor: pointer;
 }
 
+.card.device_card, .device_page {
+    height: max-content;
+}
+
 .device_card .device_icon, .device_page .device_icon {
     border-radius: 10px 10px 0px 0px;
     border-bottom: 1px solid #424242;
@@ -104,4 +108,11 @@
     color: #212121;
     background-color: #8bc34a;
     border: none;
+}
+
+@media only screen and (min-width: 600px) {
+    main {
+        display: flex;
+        justify-content: center;
+    }
 }
