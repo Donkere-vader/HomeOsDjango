@@ -26,6 +26,12 @@ class PicoModel:
 
         return obj
 
+    def save(self):
+        table_name = self.__class__.__name__.lower()
+        db[table_name][self.id] = self.json_obj
+        db.commit()
+
+
 class User(PicoModel):
     private_fields = ["password"]
 
@@ -37,6 +43,23 @@ class User(PicoModel):
 
 class Device(PicoModel):
     private_fields = ["address"]
+
+    def action(self, action, action_data):
+        response = {
+            "active": True,
+            "color": "FFFF00",
+            "active_program": "program_one_id",
+        }
+
+        keys = ["color", "active", "active_program"]
+
+        for key in keys:
+            if key in response:
+                self[key] = response[key]
+
+        self.save()
+
+        return False, response
 
 
 class Program(PicoModel):

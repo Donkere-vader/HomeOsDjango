@@ -6,6 +6,7 @@ from .functions import random_string
 from datetime import datetime as dt
 from datetime import timedelta
 from .constants import DATETIME_STRING_FORMAT
+import json
 
 
 # VIEWS
@@ -57,30 +58,51 @@ def devices(request):
 
 
 def dev(request):
-    username = request.GET['auth_username']
-    key = request.GET['auth_key']
-    device_id = request.GET['device_id']
+    if request.method == "GET":
+        username = request.GET['auth_username']
+        key = request.GET['auth_key']
+        device_id = request.GET['device_id']
 
-    if username in db['user'] and db['auth_keys'][username]['key'] == key:
-        user = User(username, db['user'][username])
+        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+            user = User(username, db['user'][username])
 
-        if device_id in db['user'][username]['devices']:
-            device = Device(device_id, db['device'][device_id])
+            if device_id in db['user'][username]['devices']:
+                device = Device(device_id, db['device'][device_id])
 
-            return json_response(device.serialize(
-                fields=[
-                    "name",
-                    "description",
-                    "programs",
-                    "active",
-                    "color",
-                    "icon",
-                    "active_program",
-                ]
-            ))
-        return json_response({"error": "Unknown device"})
+                return json_response(device.serialize(
+                    fields=[
+                        "name",
+                        "description",
+                        "programs",
+                        "active",
+                        "color",
+                        "icon",
+                        "active_program",
+                    ]
+                ))
+            return json_response({"error": "Unknown device"})
 
-    return json_response({"error": "You are not logged in"})
+        return json_response({"error": "You are not logged in"})
+    elif request.method == "POST":
+        username = request.POST['auth_username']
+        key = request.POST['auth_key']
+        device_id = request.POST['device_id']
+        action = request.POST['action']
+        action_data = json.loads(request.POST['action_data'])
+
+        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+            user = User(username, db['user'][username])
+
+            if device_id in user['devices']:
+                device = Device(device_id, db['device'][device_id])
+
+                error, response = device.action(action, action_data)
+
+                return json_response({"error": error, "response": response})
+
+            return json_response({"error": "Unknown device"})
+
+        return json_response({"error": "You are not logged in"})
 
 
 def global_programs(request):

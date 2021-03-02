@@ -9,7 +9,7 @@ function LogoutPage() {
 
     return (
         <main>
-            <h1>Doei</h1>
+            <h1>Loggin out...</h1>
         </main>
     )
 }

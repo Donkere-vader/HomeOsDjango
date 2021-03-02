@@ -20,7 +20,7 @@ function MobileMenu() {
 
     return (
         <div id="mobile_menu">
-            <img src={ hambugerIcon } onClick={ function() {setShowing(!showing); } } />
+            <img src={ hambugerIcon } onClick={ function() {setShowing(!showing); } } alt="" />
             <div id="mobile_ul" style={{display: showing ? 'flex' : 'none'}} onClick={ function() {setShowing(!showing); } }>
                 <ul>
                     <li><Link className="no-link" to="/">Home</Link></li>

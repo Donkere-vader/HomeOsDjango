@@ -16,11 +16,11 @@ function post(url, user_data, handler, authenticated=true) {
         API_URL + url,
         data,
         function(data) {
-            if ('error' in data) {
+            if ('error' in data && data['error']) {
                 alert(data['error']);
+            } else {
+                handler(data);
             }
-
-            handler(data);
         }
     );
 }

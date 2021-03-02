@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import getIcon from '../scripts/get_icon';
-import { get } from '../scripts/server';
+import { get, post } from '../scripts/server';
 
 
 // CSS
@@ -42,8 +42,6 @@ class Device extends Component {
                 "device_id": this.device_id,
             },
             function(data) {
-                console.log(data);
-
                 device.setState({
                     active: data['active'],
                     name: data['name'],
@@ -80,21 +78,67 @@ class Device extends Component {
     }
 
     powerToggle() {
-        this.setState({
-            active: !this.state.active,
-        });
+        var device = this;
+        post(
+            `/dev`,
+            {
+                "action": "power",
+                "device_id": this.device_id,
+                "action_data": JSON.stringify(
+                    {
+                        "power": !this.state.active,
+                    }
+                ),
+            },
+            function(data) {
+                device.setState({
+                    active: data['response']['active'],
+                });
+            }
+        )        
     }
 
     selectColor(color) {
-        this.setState({
-            color: color,
-        });
+        var device = this;
+        post(
+            `/dev`,
+            {
+                "action": "set_color",
+                "device_id": this.device_id,
+                "action_data": JSON.stringify(
+                    {
+                        "color": color,
+                    }
+                ),
+            },
+            function(data) {
+                device.setState({
+                    color: data['response']['color'],
+                });
+            }
+        )   
     }
 
     selectProgram(program_id) {
-        this.setState({
-            activeProgram: program_id,
-        });
+        var device = this;
+        post(
+            `/dev`,
+            {
+                "action": "start_program",
+                "device_id": this.device_id,
+                "action_data": JSON.stringify(
+                    {
+                        "program": program_id,
+                    }
+                ),
+            },
+            function(data) {
+                console.log(data);
+                device.setState({
+                    activeProgram: data['response']['active_program'],
+                });
+            }
+        )  
     }
 
     render() {
