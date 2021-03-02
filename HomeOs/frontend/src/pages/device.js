@@ -133,7 +133,6 @@ class Device extends Component {
                 ),
             },
             function(data) {
-                console.log(data);
                 device.setState({
                     activeProgram: data['response']['active_program'],
                 });
