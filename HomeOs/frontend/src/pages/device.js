@@ -188,7 +188,7 @@ class Device extends Component {
         });
 
         return (
-            <main>
+            <main className="device_page_container">
                 <div className="card device_page">
                     <div className="device_icon" style={{ backgroundColor: this.state.active ? `#${this.state.color}` : "#212121" }}>
                         <img src={ this.state.iconObj } alt="" />

@@ -146,7 +146,11 @@ def events(request):
 
         for event_id in user['events']:
             events[event_id] = Event(event_id, db['event'][event_id]).serialize(
-                fields=["name"]
+                fields=[
+                    "name",
+                    "enabled",
+                    "time"
+                ]
             )
 
         return json_response(events)
@@ -155,17 +159,38 @@ def events(request):
 
 
 def event(request):
-    username = request.GET['auth_username']
-    key = request.GET['auth_key']
-    event_id = request.GET['event_id']
+    if request.method == "GET":
+        username = request.GET['auth_username']
+        key = request.GET['auth_key']
+        event_id = request.GET['event_id']
 
-    if username in db['user'] and db['auth_keys'][username]['key'] == key:
-        user = User(username, db['user'][username])
+        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+            user = User(username, db['user'][username])
 
-        if event_id in user['events']:
-            event = Event(event_id, db['event'][event_id])
-            return json_response(event.serialize())
+            if event_id in user['events']:
+                event = Event(event_id, db['event'][event_id])
+                return json_response(event.serialize())
 
-        return json_response({"error": "Unknown event"})
+            return json_response({"error": "Unknown event"})
 
-    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+    elif request.method == "POST":
+        username = request.POST['auth_username']
+        key = request.POST['auth_key']
+        event_id = request.POST['event_id']
+        action = request.POST['action']
+        action_data = json.loads(request.POST['action_data'])
+
+        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+            user = User(username, db['user'][username])
+
+            if event_id in user['events']:
+                event = Event(event_id, db['event'][event_id])
+
+                error, response = event.action(action, action_data)
+
+                return json_response({"error": error, "response": response})
+
+            return json_response({"error": "Unknown event"})
+
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})

@@ -67,4 +67,19 @@ class Program(PicoModel):
 
 
 class Event(PicoModel):
-    private_fields = ["action", "action_data"]
+    private_fields = []
+
+    def action(self, action, action_data):
+        response = {
+            "enabled": action_data['enabled']
+        }
+
+        keys = ["enabled"]
+
+        for key in keys:
+            if key in response:
+                self[key] = response[key]
+
+        self.save()
+
+        return False, response

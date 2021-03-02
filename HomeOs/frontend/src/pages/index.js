@@ -9,10 +9,6 @@ import { get } from '../scripts/server';
 
 
 class Index extends Component {
-    // var devices = [
-    //     <DeviceCard key={ `device_card_ledstrip_bedroom_south` } id="ledstrip_bedroom_south" name="Ledstrip bedroom Cas" description="Hello this is a ledstrip" icon="light" color="FF00FF" active={true} />
-    // ];
-
     constructor() {
         super();
 
