@@ -9,6 +9,7 @@ function DesktopMenu() {
         <ul id="desktop_menu">
             <li><Link className="no-link" to="/">Home</Link></li>
             <li><Link className="no-link" to="/programs">Programs</Link></li>
+            <li><Link className="no-link" to="/events">Events</Link></li>
             <li><Link className="no-link" to="/logout">Logout</Link></li>
         </ul>
     )
@@ -25,6 +26,7 @@ function MobileMenu() {
                 <ul>
                     <li><Link className="no-link" to="/">Home</Link></li>
                     <li><Link className="no-link" to="/programs">Programs</Link></li>
+                    <li><Link className="no-link" to="/events">Events</Link></li>
                     <li><Link className="no-link" to="/logout">Logout</Link></li>
                 </ul>
             </div>

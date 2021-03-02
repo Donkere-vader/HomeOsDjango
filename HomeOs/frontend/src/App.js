@@ -17,6 +17,7 @@ import Header from './components/header.js';
 import './static/css/app.css';
 import LoginPage from "./pages/login";
 import LogoutPage from "./pages/logout";
+import Events from "./pages/events";
 
 
 function App() {
@@ -26,6 +27,9 @@ function App() {
       <Switch>
         {/* Dynamic routes */}
         <Route path="/dev/:device_id" component={ Device } />
+
+        {/* Normal routes */}
+        <Route path="/events" component={ Events } />
 
         {/* Auth */}
         <Route path="/login" component={ LoginPage } />
