@@ -15,6 +15,8 @@ import Header from './components/header.js';
 
 // CSS
 import './static/css/app.css';
+import LoginPage from "./pages/login";
+import LogoutPage from "./pages/logout";
 
 
 function App() {
@@ -24,6 +26,10 @@ function App() {
       <Switch>
         {/* Dynamic routes */}
         <Route path="/dev/:device_id" component={ Device } />
+
+        {/* Auth */}
+        <Route path="/login" component={ LoginPage } />
+        <Route path="/logout" component={ LogoutPage } />
 
         {/* Index */}
         <Route path="/" component={ Index } />

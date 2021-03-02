@@ -29,7 +29,7 @@
 .device_page .device_control {
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 20px;
     gap: 3px;
 }
 

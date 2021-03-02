@@ -1,33 +1,81 @@
 import React, { Component } from 'react';
 import getIcon from '../scripts/get_icon';
+import { get } from '../scripts/server';
 
 
 // CSS
 import '../static/css/device.css';
 
 class Device extends Component {
-    constructor() {
+    constructor({match}) {
         super();
 
-        this.state = {
-            active: false,
-            color: "FF0000",
-            programs: {
-                "1": {name: "loading..."},
-                "2": {name: "wake"}
-            },
-            activeProgram: "1",
-        };
+        this.device_id = match.params.device_id;
 
-        this.name = "Ledstrip bedroom south";
-        this.description = "Ledstrip/ wake light bedroom Cas";
-        this.icon = "light";
-        this.iconObj = getIcon(this.icon, "white");
+        this.state = {
+            name: "Loading...",
+            description: "Loading...",
+            iconObj: null,
+            active: false,
+            color: "212121",
+            programs: {},
+            activeProgram: null,
+        };
 
         // Bind methods
         this.powerToggle = this.powerToggle.bind(this);
         this.selectColor = this.selectColor.bind(this);
         this.selectProgram = this.selectProgram.bind(this);
+        this.getDeviceInfo = this.getDeviceInfo.bind(this);
+        this.getProgramsInfo = this.getProgramsInfo.bind(this);
+    }
+
+    componentDidMount() {
+        this.getDeviceInfo();
+    }
+
+    getDeviceInfo() {
+        var device = this;
+        get(
+            "/dev",
+            {
+                "device_id": this.device_id,
+            },
+            function(data) {
+                console.log(data);
+
+                device.setState({
+                    active: data['active'],
+                    name: data['name'],
+                    description: data['description'],
+                    color: data['color'],
+                    iconObj: getIcon(data['icon'], "white"),
+                });
+
+                device.getProgramsInfo(data['programs']);
+            }
+        );
+    }
+
+    getProgramsInfo(program_ids) {
+        var programs = {};
+        var device = this;
+        
+        program_ids.forEach(function(id) {
+            get(
+                "/program",
+                {
+                    "program_id": id,
+                },
+                function(data) {
+                    programs[id] = data;
+                    
+                    device.setState({
+                        programs: programs
+                    });
+                }
+            )
+        });
     }
 
     powerToggle() {
@@ -79,14 +127,8 @@ class Device extends Component {
 
         // Program picker buttons
         var program_picker_buttons = [];
-
-        var program_id;
-        var program_ids = []
-        for (program_id in this.state.programs) {
-            program_ids.push(program_id);
-        }
         
-        program_ids.forEach(function(program_id) {
+        Object.keys(this.state.programs).forEach(function(program_id) {
             var activeClass = "";
 
             if (device.state.activeProgram === program_id) {
@@ -104,7 +146,7 @@ class Device extends Component {
             <main>
                 <div className="card device_page">
                     <div className="device_icon" style={{ backgroundColor: this.state.active ? `#${this.state.color}` : "#212121" }}>
-                        <img src={ this.iconObj } alt="" />
+                        <img src={ this.state.iconObj } alt="" />
                     </div>
                     <div className="device_info">
                         <div className="device_active" style={{
@@ -115,8 +157,8 @@ class Device extends Component {
                             }}></div>
                             <span>{this.state.active ? "on" : "off"}</span>
                         </div>
-                        <h2>{ this.name }</h2>
-                        <p>{ this.description }</p>
+                        <h2>{ this.state.name }</h2>
+                        <p>{ this.state.description }</p>
                     </div>
                     <div className="device_control">
                         <h3>Device control</h3>

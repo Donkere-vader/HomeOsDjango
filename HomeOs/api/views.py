@@ -32,8 +32,8 @@ def auth(request):
 
 
 def devices(request):
-    username = request.GET['username']
-    key = request.GET['key']
+    username = request.GET['auth_username']
+    key = request.GET['auth_key']
 
     if username in db['user'] and db['auth_keys'][username]['key'] == key:
         user = User(username, db['user'][username])
@@ -46,6 +46,8 @@ def devices(request):
                     "name",
                     "description",
                     "active",
+                    "icon",
+                    "color",
                 ]
             )
 
@@ -55,8 +57,8 @@ def devices(request):
 
 
 def dev(request):
-    username = request.GET['username']
-    key = request.GET['key']
+    username = request.GET['auth_username']
+    key = request.GET['auth_key']
     device_id = request.GET['device_id']
 
     if username in db['user'] and db['auth_keys'][username]['key'] == key:
@@ -71,6 +73,8 @@ def dev(request):
                     "description",
                     "programs",
                     "active",
+                    "color",
+                    "icon",
                 ]
             ))
         return json_response({"error": "Unknown device"})
@@ -79,8 +83,8 @@ def dev(request):
 
 
 def global_programs(request):
-    username = request.GET['username']
-    key = request.GET['key']
+    username = request.GET['auth_username']
+    key = request.GET['auth_key']
 
     if username in db['user'] and db['auth_keys'][username]['key'] == key:
         user = User(username, db['user'][username])
@@ -96,8 +100,8 @@ def global_programs(request):
 
 
 def program(request):
-    username = request.GET['username']
-    key = request.GET['key']
+    username = request.GET['auth_username']
+    key = request.GET['auth_key']
     program_id = request.GET['program_id']
 
     if username in db['user'] and db['auth_keys'][username]['key'] == key:
@@ -109,8 +113,8 @@ def program(request):
 
 
 def events(request):
-    username = request.GET['username']
-    key = request.GET['key']
+    username = request.GET['auth_username']
+    key = request.GET['auth_key']
 
     if username in db['user'] and db['auth_keys'][username]['key'] == key:
         user = User(username, db['user'][username])
@@ -128,8 +132,8 @@ def events(request):
 
 
 def event(request):
-    username = request.GET['username']
-    key = request.GET['key']
+    username = request.GET['auth_username']
+    key = request.GET['auth_key']
     event_id = request.GET['event_id']
 
     if username in db['user'] and db['auth_keys'][username]['key'] == key:

@@ -1,0 +1,32 @@
+/* FORM */
+.form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form label {
+    margin-top: 20px;
+}
+
+.form input, .form .submit {
+    width: 100%;
+    margin-top: 5px;
+    border: none;
+    border-bottom: 2px solid rgba(0, 0, 0, 0);
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 15px;
+}
+
+.form input:focus {
+    border-radius: 3px 3px 0px 0px;
+    border-bottom: 2px solid orangered;
+}
+
+.form .submit {
+    font-weight: bold;
+    background-color: orangered;
+    color: #FFFFFF;
+    cursor: pointer;
+}
