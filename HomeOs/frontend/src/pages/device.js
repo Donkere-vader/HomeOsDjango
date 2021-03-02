@@ -213,8 +213,10 @@ class Device extends Component {
                         }} onClick={ this.powerToggle }>{ this.state.active ? "Turn off" : "Turn on" }</button>
 
                         <h4>Select color</h4>
-                        <div className="color_picker">
-                            { color_picker_buttons }
+                        <div className="horizontal-center">
+                            <div className="color_picker">
+                                { color_picker_buttons }
+                            </div>
                         </div>
 
                         <h4>Select program</h4>

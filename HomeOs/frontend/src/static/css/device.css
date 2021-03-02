@@ -70,6 +70,8 @@
 .color_picker {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
+    max-width: 350px;
 }
 
 .color_picker_button {
