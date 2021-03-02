@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { get, post } from '../scripts/server';
+import $ from 'jquery';
 
 
 class Event extends Component {
@@ -11,9 +12,14 @@ class Event extends Component {
         this.state = {
             name: "Loading...",
             enabled: false,
+            time: {
+                hour: 0,
+                minute: 0,
+            }
         }
 
         this.toggleEnabled = this.toggleEnabled.bind(this);
+        this.setTime = this.setTime.bind(this);
     }
 
     componentDidMount() {
@@ -50,6 +56,44 @@ class Event extends Component {
         );
     }
 
+    setTime() {
+        var hour = $("#event_hour_input").val();
+
+        if (hour === "") {
+            hour = this.state.time['hour'];
+            $("#event_hour_input").val(
+                hour
+            );
+        }
+
+        var minute = $("#event_minute_input").val();
+
+        if (minute === "") {
+            minute = this.state.time['minute'];
+            $("#event_minute_input").val(
+                minute
+            );
+        }
+
+        post(
+            "/event",
+            {
+                "event_id": this.event_id,
+                "action": "set_time",
+                "action_data": JSON.stringify({
+                    "time": {
+                        "hour": hour,
+                        "minute": minute,
+                    },
+                }),
+                function(data) {
+                    console.log(data);
+                }
+            },
+
+        );
+    }
+
     render() {
         return (
             <main>
@@ -58,10 +102,15 @@ class Event extends Component {
                         <h1>{ this.state.name }</h1>
                     </div>
                     <div className="event_control">
-                        <h3>Control event</h3>
+                        <h2>Control event</h2>
                         <button className={ "event_enabled_button" + (this.state.enabled ? " active" : "") } onClick={ this.toggleEnabled }>{ this.state.enabled ? "Disable" : "Enable" }</button>
 
-                        <input type="time" name="" id=""/>
+                        <h3>Event planning</h3>
+                        <h4>Time</h4>
+                        <div>
+                            <input id="event_hour_input" onChange={ this.setTime } type="number" min="0" max="23" placeholder={ this.state.time['hour'] } />
+                            <input id="event_minute_input" onChange={ this.setTime } type="number" min="0" max="59" placeholder={ this.state.time['minute'] } />
+                        </div>
                     </div>
                 </div>
             </main>
