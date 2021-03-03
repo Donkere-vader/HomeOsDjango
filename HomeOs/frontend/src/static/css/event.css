@@ -28,6 +28,9 @@
     padding: 20px;
     border-bottom: 1px solid #424242;
     border-radius: 10px 10px 0px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .event_page .event_name.active {
@@ -35,11 +38,36 @@
     background-color: #8bc34a;
 }
 
+.event_page .event_name .event_name_change {
+    display: flex;
+    gap: 5px;
+}
+
+.event_page .event_name .event_name_change img {
+    width: 30px;
+    cursor: pointer;
+}
+
+.event_page .event_name .event_name_change input {
+    border: none;
+    background-color: #212121;
+    border-radius: 5px;
+    font-size: 25px;
+    font-weight: bold;
+    color: #FFFFFF;
+    padding: 5px 10px;
+    width: 100%;
+}
+
 .event_page .event_control {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.event_page .event_control h4 {
+    margin-top: 20px;
 }
 
 .event_page .event_enabled_button {
@@ -58,6 +86,18 @@
     border: none;
     background-color: #8bc34a;
     color: #212121;
+}
+
+.time_selector {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.time_selector input {
+    width: 100%;
 }
 
 .weekday_selector {

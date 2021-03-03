@@ -86,14 +86,16 @@ class Event(PicoModel):
 
         if action == "toggle_enabled":
             response['enabled'] = action_data['enabled']
-        if action == "set_time":
+        elif action == "set_time":
             response['time'] = action_data["time"]
-        if action == "set_weekday":
+        elif action == "set_weekday":
             response['weekdays'] = action_data["weekdays"]
-        if action == 'set_devices':
+        elif action == 'set_devices':
             response['devices'] = action_data["devices"]
-        if action == "set_action_data":
+        elif action == "set_action_data":
             response['action_data'] = action_data['action_data']
+        elif action == "set_name":
+            response['name'] = action_data["name"]
 
         keys = ["enabled", "time", "weekdays", "devices", "action_data"]
 

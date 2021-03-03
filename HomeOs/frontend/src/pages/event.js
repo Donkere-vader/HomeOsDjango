@@ -4,6 +4,7 @@ import $ from 'jquery';
 import arrayRemove from '../scripts/remove_array';
 import DeviceListCard from '../components/device_list_card';
 import readSnakeCase from '../scripts/read_snak_case';
+import getIcon from '../scripts/get_icon';
 
 
 function ActionDataRow({id, k, value, event}) {
@@ -24,6 +25,7 @@ class Event extends Component {
         
         this.state = {
             name: "Loading...",
+            eventName: "Loading...",
             enabled: false,
             time: {
                 hour: 0,
@@ -36,6 +38,7 @@ class Event extends Component {
             deviceObjs: {},
             action_data: {},
             actionData: {},
+            editingName: false,
         }
 
         this.weekday_lets = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -48,6 +51,7 @@ class Event extends Component {
         this.selectDevice = this.selectDevice.bind(this);
         this.setAction = this.setAction.bind(this);
         this.setActionData = this.setActionData.bind(this);
+        this.setEventName = this.setEventName.bind(this);
     }
 
     componentDidMount() {
@@ -66,6 +70,7 @@ class Event extends Component {
                     hour: data['time']['hour'],
                     minute: data['time']['minute'].toString().padStart(2, '0'),
                     actionData: data['action_data'],
+                    eventName: data['name'],
                 });
 
                 event.getDevicesInfo();
@@ -236,14 +241,47 @@ class Event extends Component {
                     "action_data": action_data,
                 }),
             },
+            function(data) {}
+        );
+    }
+
+    setEventName() {
+        var name = $("#event_name_input").val();
+
+        this.setState({eventName: name});
+
+        var event = this;
+
+        post(
+            "/event",
+            {
+                "event_id": this.event_id,
+                "action": "set_name",
+                "action_data": JSON.stringify({
+                    "name": name,
+                }),
+            },
             function(data) {
-                console.log(data);
+                event.setState({
+                    name: data['response']['name'],
+                });
             }
         );
     }
 
     render() {
         var event = this;
+
+        var event_name = <h1 onClick={ function() {event.setState({editingName: true}) } }>{ this.state.name }</h1>;
+        if (this.state.editingName) {
+            event_name = (
+                <div className="event_name_change">
+                    <input autoFocus type="text" name="event_name" value={ this.state.eventName } id="event_name_input" onChange={ this.setEventName } />
+                    <img src={ getIcon("save", "white") } alt="" onClick={ function() {event.setState({editingName: false})} }/>
+                </div>
+            );
+        }
+
         var weekdays_selector = [];
 
         var active_weekdays = [];
@@ -300,17 +338,17 @@ class Event extends Component {
             <main>
                 <div className="card event_page">
                     <div className={ "event_name" + (this.state.enabled ? " active" : "")}>
-                        <h1>{ this.state.name }</h1>
+                        { event_name }
                         <span className="timestamp">{ this.state.hour }:{ this.state.minute }</span>
                     </div>
                     <div className="event_control">
                         <h2>Control event</h2>
                         <button className={ "event_enabled_button" + (this.state.enabled ? " active" : "") } onClick={ this.toggleEnabled }>{ this.state.enabled ? "Disable" : "Enable" }</button>
 
-                        <h3>Event planning</h3>
                         <h4>Time</h4>
                         <div className="time_selector">
                             <input id="event_hour_input" onChange={ this.setTime } type="number" min="0" max="23" placeholder={ this.state.time['hour'] } />
+                            <span>:</span>
                             <input id="event_minute_input" onChange={ this.setTime } type="number" min="0" max="59" placeholder={ this.state.time['minute'] } />
                         </div>
 
@@ -332,8 +370,8 @@ class Event extends Component {
                         <h4>Action data</h4>
                         <div className="action_data">
                             <div className="column_names">
-                                <h4>Key</h4>
-                                <h4>Value</h4>
+                                <span>Key</span>
+                                <span>Value</span>
                             </div>
                             { action_data_list }
                         </div>
