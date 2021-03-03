@@ -57,8 +57,6 @@ class Events extends Component {
             );
         });
 
-        console.log(event_doms);
-
         return (
             <main className="events_list">
                 { event_doms }

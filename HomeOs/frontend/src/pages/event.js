@@ -292,7 +292,7 @@ class Event extends Component {
         this.weekday_lets.forEach(function(weekday_let) {
             var active = (active_weekdays.indexOf(weekday_let) >= 0);
             weekdays_selector.push(
-                <button onClick={ function() {event.setWeekday(weekday_let, !active)} } className={ "weekday_selector_button" + (active ? " active" : "") }>{ weekday_let.charAt(0) }</button>
+                <button key={ weekday_let } onClick={ function() {event.setWeekday(weekday_let, !active)} } className={ "weekday_selector_button" + (active ? " active" : "") }>{ weekday_let.charAt(0) }</button>
             );
         });
 
@@ -302,7 +302,7 @@ class Event extends Component {
             var device = event.state.deviceObjs[device_id];
             var selected = (event.state.devices.indexOf(device_id) > -1);
             devices_selector.push(
-                <div onClick={ function() {event.selectDevice(device_id, !selected); } }>
+                <div key={ device_id } onClick={ function() {event.selectDevice(device_id, !selected); } }>
                     <DeviceListCard id={ device_id } name={ device['name'] } selected={ selected } icon={ device['icon'] } color={ device['color'] } />
                 </div>
             );
@@ -314,7 +314,7 @@ class Event extends Component {
 
         actions.forEach(function(action) {
             actions_list.push(
-                <option value={ action }>{ readSnakeCase(action) }</option>
+                <option key={ action } value={ action }>{ readSnakeCase(action) }</option>
             );
         });
 
@@ -328,7 +328,7 @@ class Event extends Component {
         Object.keys(action_data_w_empty).forEach(function(key) {
             var id = idx;
             action_data_list.push(
-                <ActionDataRow id={ id } k={ key } value={ event.state.actionData[key] } event={ event }/>
+                <ActionDataRow key={ id } id={ id } k={ key } value={ event.state.actionData[key] } event={ event }/>
             );
             event.action_data_ids.push(id);
             idx += 1;
