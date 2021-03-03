@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { get, post } from '../scripts/server';
 import $ from 'jquery';
 import arrayRemove from '../scripts/remove_array';
+import DeviceListCard from '../components/device_list_card';
 
 
 class Event extends Component {
@@ -20,6 +21,8 @@ class Event extends Component {
             hour: 0,
             minute: 0,
             weekdays: [],
+            devices: [],
+            deviceObjs: {},
         }
 
         this.weekday_lets = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -27,6 +30,8 @@ class Event extends Component {
         this.toggleEnabled = this.toggleEnabled.bind(this);
         this.setTime = this.setTime.bind(this);
         this.setWeekday = this.setWeekday.bind(this);
+        this.getDevicesInfo = this.getDevicesInfo.bind(this);
+        this.selectDevice = this.selectDevice.bind(this);
     }
 
     componentDidMount() {
@@ -45,8 +50,28 @@ class Event extends Component {
                     hour: data['time']['hour'],
                     minute: data['time']['minute'].toString().padStart(2, '0'),
                 });
+
+                event.getDevicesInfo();
             }
         );
+    }
+
+    getDevicesInfo() {
+        console.log("getDevicesInfo");
+
+        var event = this;
+
+        this.state.devices.forEach(function(device_id) {
+            get(
+                "/devices",
+                {},
+                function(data) {
+                    event.setState({
+                        deviceObjs: data,
+                    });
+                }
+            );
+        });
     }
 
     toggleEnabled() {
@@ -140,9 +165,38 @@ class Event extends Component {
         );
     }
 
-    render() {
-        var weekdays_selector = [];
+    selectDevice(device_id, selected) {
         var event = this;
+        
+        var devices = this.state.devices;
+
+        if (selected) {
+            devices.push(device_id);
+        } else if (!selected) {
+            devices = arrayRemove(devices, device_id);
+        }
+
+        post(
+            "/event",
+            {
+                "event_id": this.event_id,
+                "action": "set_devices",
+                "action_data": JSON.stringify({
+                    "devices": devices,
+                }),
+            },
+            function(data) {
+                console.log(data);
+                event.setState({
+                    devices: data['response']['devices'],
+                });
+            }
+        );
+    }
+
+    render() {
+        var event = this;
+        var weekdays_selector = [];
 
         var active_weekdays = [];
         this.state.weekdays.forEach(function(weekday_idx) {
@@ -153,6 +207,19 @@ class Event extends Component {
             var active = (active_weekdays.indexOf(weekday_let) >= 0);
             weekdays_selector.push(
                 <button onClick={ function() {event.setWeekday(weekday_let, !active)} } className={ "weekday_selector_button" + (active ? " active" : "") }>{ weekday_let.charAt(0) }</button>
+            );
+        });
+
+        var devices_selector = [];
+
+        Object.keys(this.state.deviceObjs).forEach(function(device_id) {
+            var device = event.state.deviceObjs[device_id];
+            var selected = (event.state.devices.indexOf(device_id) > -1);
+            console.log(device_id, selected);
+            devices_selector.push(
+                <div onClick={ function() {event.selectDevice(device_id, !selected); } }>
+                    <DeviceListCard id={ device_id } name={ device['name'] } selected={ selected } icon={ device['icon'] } color={ device['color'] } />
+                </div>
             );
         });
 
@@ -177,6 +244,11 @@ class Event extends Component {
                         <h4>Weekdays</h4>
                         <div className="weekday_selector">
                             { weekdays_selector }
+                        </div>
+
+                        <h4>Devices</h4>
+                        <div className="devices_list">
+                            { devices_selector }
                         </div>
                     </div>
                 </div>

@@ -90,8 +90,10 @@ class Event(PicoModel):
             response['time'] = action_data["time"]
         if action == "set_weekday":
             response['weekdays'] = action_data["weekdays"]
+        if action == 'set_devices':
+            response['devices'] = action_data["devices"]
 
-        keys = ["enabled", "time", "weekdays"]
+        keys = ["enabled", "time", "weekdays", "devices"]
 
         for key in keys:
             if key in response:

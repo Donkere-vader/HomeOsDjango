@@ -118,3 +118,44 @@
         justify-content: center;
     }
 }
+
+.devices_list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.device_list_card {
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    gap: 10px;
+    font-size: 23px;
+    font-weight: bold;
+    border: 1px solid #424242;
+    cursor: pointer;
+}
+
+.device_list_card.selected {
+    border: none;
+    background-color: #8bc34a;
+}
+
+.device_list_card .device_icon {
+    border-radius: 5px 0px 0px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-right: 1px solid #424242;
+    height: 50px;
+    width: 40px;
+}
+
+.device_list_card.selected .device_icon {
+    border-right: 1px solid transparent;
+}
+
+.device_list_card .device_icon img {
+    height: 25px;
+    width: 25px;
+}
