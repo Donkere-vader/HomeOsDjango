@@ -84,3 +84,35 @@
     background-color: #8bc34a;
     border: 1px solid transparent;
 }
+
+/* Action data input */
+.action_data {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.action_data .column_names {
+    display: flex;
+    justify-content: space-between;
+}
+
+.action_data .action_data_row {
+    display: flex;
+    gap: 5px;
+}
+
+.action_data .action_data_row input {
+    width: 100%;
+    border: 1px solid #424242;
+    border-radius: 3px;
+    background: none;
+    color: #FFFFFF;
+    font-size: 20px;
+    padding: 3px 10px;
+}
+
+.action_data .action_data_row input:focus {
+    border-radius: 3px 3px 0px 0px;
+    border: 1px solid orange;
+}

@@ -3,6 +3,17 @@ import { get, post } from '../scripts/server';
 import $ from 'jquery';
 import arrayRemove from '../scripts/remove_array';
 import DeviceListCard from '../components/device_list_card';
+import readSnakeCase from '../scripts/read_snak_case';
+
+
+function ActionDataRow({id, k, value, event}) {
+    return (
+        <div className="action_data_row">
+            <input type="text" name={ `action_data_${ id }_key` } id={ `action_data_${ id }_key_input` } value={ k } onChange={ event.setActionData } />
+            <input type="text" name={ `action_data_${ id }_value` } id={ `action_data_${ id }_value_input` } value={ value } onChange={ event.setActionData } />
+        </div>
+    )
+}
 
 
 class Event extends Component {
@@ -23,15 +34,20 @@ class Event extends Component {
             weekdays: [],
             devices: [],
             deviceObjs: {},
+            action_data: {},
+            actionData: {},
         }
 
         this.weekday_lets = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+        this.action_data_ids = [];
 
         this.toggleEnabled = this.toggleEnabled.bind(this);
         this.setTime = this.setTime.bind(this);
         this.setWeekday = this.setWeekday.bind(this);
         this.getDevicesInfo = this.getDevicesInfo.bind(this);
         this.selectDevice = this.selectDevice.bind(this);
+        this.setAction = this.setAction.bind(this);
+        this.setActionData = this.setActionData.bind(this);
     }
 
     componentDidMount() {
@@ -49,6 +65,7 @@ class Event extends Component {
                 event.setState({
                     hour: data['time']['hour'],
                     minute: data['time']['minute'].toString().padStart(2, '0'),
+                    actionData: data['action_data'],
                 });
 
                 event.getDevicesInfo();
@@ -189,6 +206,42 @@ class Event extends Component {
         );
     }
 
+    setAction() {
+        var action = $("#action_input").val();
+        console.log(action);
+    }
+
+    setActionData() {
+        var action_data = {};
+        
+        this.action_data_ids.forEach(function(id) {
+            var key = $(`#action_data_${ id }_key_input`).val();
+            var value = $(`#action_data_${ id }_value_input`).val();
+            
+            if (key) {
+                action_data[key] = value;
+            }
+        })
+
+        console.log(action_data);
+
+        this.setState({actionData: action_data});
+
+        post(
+            "/event",
+            {
+                "event_id": this.event_id,
+                "action": "set_action_data",
+                "action_data": JSON.stringify({
+                    "action_data": action_data,
+                }),
+            },
+            function(data) {
+                console.log(data);
+            }
+        );
+    }
+
     render() {
         var event = this;
         var weekdays_selector = [];
@@ -217,6 +270,32 @@ class Event extends Component {
             );
         });
 
+        var actions = ["set_color", "start_program", "power"];
+
+        var actions_list = [];
+
+        actions.forEach(function(action) {
+            actions_list.push(
+                <option value={ action }>{ readSnakeCase(action) }</option>
+            );
+        });
+
+        this.action_data_ids = [];
+        var action_data_list = [];
+
+        var idx = 0;
+        var action_data_w_empty = this.state.actionData;
+        action_data_w_empty[''] = "";  // add empty
+
+        Object.keys(action_data_w_empty).forEach(function(key) {
+            var id = idx;
+            action_data_list.push(
+                <ActionDataRow id={ id } k={ key } value={ event.state.actionData[key] } event={ event }/>
+            );
+            event.action_data_ids.push(id);
+            idx += 1;
+        });
+
         return (
             <main>
                 <div className="card event_page">
@@ -243,6 +322,20 @@ class Event extends Component {
                         <h4>Devices</h4>
                         <div className="devices_list">
                             { devices_selector }
+                        </div>
+
+                        <h4>Action</h4>
+                        <select name="action" id="action_input" onChange={ function() { event.setAction() } }>
+                            { actions_list }
+                        </select>
+
+                        <h4>Action data</h4>
+                        <div className="action_data">
+                            <div className="column_names">
+                                <h4>Key</h4>
+                                <h4>Value</h4>
+                            </div>
+                            { action_data_list }
                         </div>
                     </div>
                 </div>
