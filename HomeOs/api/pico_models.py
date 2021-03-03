@@ -1,5 +1,6 @@
 from . import db
 import bcrypt
+from .functions import random_string
 
 
 class PicoModel:
@@ -106,3 +107,28 @@ class Event(PicoModel):
         self.save()
 
         return False, response
+
+    @classmethod
+    def new(cls):
+        new_id = random_string()
+        while new_id in db['event']:
+            new_id = random_string()
+
+        event = Event(new_id, {
+            "name": "New event",
+            "enabled": True,
+            "weekdays": [],
+            "time": {
+                "hour": 12,
+                "minute": 0,
+            },
+            "devices": [],
+            "action": "power",
+            "action_data": {
+                "power": True
+            }
+        })
+
+        event.save()
+
+        return False, event

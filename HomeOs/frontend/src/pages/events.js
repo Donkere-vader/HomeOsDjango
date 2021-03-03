@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import EventCard from '../components/event_card';
-import { get } from '../scripts/server';
+import getIcon from '../scripts/get_icon';
+import { get, post } from '../scripts/server';
 
 // CSS
 import '../static/css/event.css';
+import '../static/css/floating_action_button.css'
 
 
 class Events extends Component {
@@ -13,6 +15,8 @@ class Events extends Component {
         this.state = {
             events: {},
         };
+
+        this.newEvent = this.newEvent.bind(this);
     }
 
     componentDidMount() {
@@ -26,6 +30,18 @@ class Events extends Component {
                 events.setState({
                     events: data
                 });
+            }
+        );
+    }
+
+    newEvent() {
+        post(
+            "/event/new",
+            {},
+            function(data) {
+                if ('id' in data['response']) {
+                    window.location = `/event/${data['response']['id']}`;
+                }
             }
         );
     }
@@ -46,6 +62,9 @@ class Events extends Component {
         return (
             <main className="events_list">
                 { event_doms }
+                <div id="floating_action_button" onClick={ function() { events.newEvent() }}>
+                    <img src={ getIcon("add", "white") } alt=""/>
+                </div>
             </main>
         )
     }

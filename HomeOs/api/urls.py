@@ -9,4 +9,5 @@ urlpatterns = [
     path('global_programs', views.global_programs),
     path('event', views.event),
     path('events', views.events),
+    path('event/new', views.event_new),
 ]

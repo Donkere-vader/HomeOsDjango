@@ -194,3 +194,23 @@ def event(request):
             return json_response({"error": "Unknown event"})
 
         return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
+
+def event_new(request):
+    if request.method == "POST":
+        username = request.POST['auth_username']
+        key = request.POST['auth_key']
+
+        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+            user = User(username, db['user'][username])
+            error, new_event = Event.new()
+
+            user['events'].append(new_event.id)
+            user.save()
+
+            return json_response({
+                "error": error,
+                "response": {"id": new_event.id}
+            })
+
+    return json_response({"error": "Method not allowed"})
