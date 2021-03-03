@@ -8,11 +8,9 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 
 ### Todo
 
-- [ ] Encrypt passwords using bctypt
-- [ ] Programs pages
-- [ ] Program page
-- [ ] New?
-  - [ ] New program from UI?
-  - [ ] New device from UI?
-  - [ ] New event from UI?
-  - [ ] New user from UI?
+- [X] Encrypt passwords using bctypt
+- [X] Programs pages
+- [ ] Clean up views.py
+- [X] New?
+  - [X] New event from UI?
+  - [X] Delete event from UI?

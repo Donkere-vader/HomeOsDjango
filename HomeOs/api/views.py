@@ -214,3 +214,22 @@ def event_new(request):
             })
 
     return json_response({"error": "Method not allowed"})
+
+
+def event_delete(request):
+    if request.method == "POST":
+        username = request.POST['auth_username']
+        key = request.POST['auth_key']
+        event_id = request.POST['event_id']
+
+        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+            user = User(username, db['user'][username])
+
+            if event_id in user['events']:
+                event = Event(event_id, db['event'][event_id])
+                error = event.delete()
+                return json_response({"error": error})
+
+            return json_response({"error": "Unknown event"})
+
+    return json_response({"error": "Method not allowed"})

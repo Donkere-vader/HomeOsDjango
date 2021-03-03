@@ -108,6 +108,17 @@ class Event(PicoModel):
 
         return False, response
 
+    def delete(self):
+        del db[self.__class__.__name__.lower()][self.id]
+
+        for username in db['user']:
+            if self.id in db['user'][username]['events']:
+                db['user'][username]['events'].remove(self.id)
+
+        db.commit()
+        del self
+        return False
+
     @classmethod
     def new(cls):
         new_id = random_string()

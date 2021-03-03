@@ -70,7 +70,7 @@
     margin-top: 20px;
 }
 
-.event_page .event_enabled_button {
+.event_page .big_button {
     border-radius: 3px;
     padding: 10px;
     font-weight: bold;
@@ -82,7 +82,7 @@
     border: 1px solid #424242;
 }
 
-.event_page .event_enabled_button.active {
+.event_page .big_button.active {
     border: none;
     background-color: #8bc34a;
     color: #212121;
@@ -155,4 +155,9 @@
 .action_data .action_data_row input:focus {
     border-radius: 3px 3px 0px 0px;
     border: 1px solid orange;
+}
+
+.big_button.delete {
+    background-color: rgb(255, 35, 35);
+    border: none;
 }

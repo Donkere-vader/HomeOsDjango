@@ -52,6 +52,7 @@ class Event extends Component {
         this.setAction = this.setAction.bind(this);
         this.setActionData = this.setActionData.bind(this);
         this.setEventName = this.setEventName.bind(this);
+        this.deleteEvent = this.deleteEvent.bind(this);
     }
 
     componentDidMount() {
@@ -269,6 +270,18 @@ class Event extends Component {
         );
     }
 
+    deleteEvent() {
+        post(
+            "/event/delete",
+            {
+                "event_id": this.event_id,
+            },
+            function(data) {
+                window.location = "/events";
+            }
+        );
+    }
+
     render() {
         var event = this;
 
@@ -343,7 +356,7 @@ class Event extends Component {
                     </div>
                     <div className="event_control">
                         <h2>Control event</h2>
-                        <button className={ "event_enabled_button" + (this.state.enabled ? " active" : "") } onClick={ this.toggleEnabled }>{ this.state.enabled ? "Disable" : "Enable" }</button>
+                        <button className={ "big_button" + (this.state.enabled ? " active" : "") } onClick={ this.toggleEnabled }>{ this.state.enabled ? "Disable" : "Enable" }</button>
 
                         <h4>Time</h4>
                         <div className="time_selector">
@@ -375,8 +388,12 @@ class Event extends Component {
                             </div>
                             { action_data_list }
                         </div>
+
+                        <h4>Delete event</h4>
+                        <button className="big_button delete" onClick={ this.deleteEvent }>Delete</button>
                     </div>
                 </div>
+                <div style={{ height: "50px" }}></div>
             </main>
         )
     }
