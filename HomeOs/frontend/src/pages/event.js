@@ -57,21 +57,17 @@ class Event extends Component {
     }
 
     getDevicesInfo() {
-        console.log("getDevicesInfo");
-
         var event = this;
 
-        this.state.devices.forEach(function(device_id) {
-            get(
-                "/devices",
-                {},
-                function(data) {
-                    event.setState({
-                        deviceObjs: data,
-                    });
-                }
-            );
-        });
+        get(
+            "/devices",
+            {},
+            function(data) {
+                event.setState({
+                    deviceObjs: data,
+                });
+            }
+        );
     }
 
     toggleEnabled() {
@@ -186,7 +182,6 @@ class Event extends Component {
                 }),
             },
             function(data) {
-                console.log(data);
                 event.setState({
                     devices: data['response']['devices'],
                 });
@@ -215,7 +210,6 @@ class Event extends Component {
         Object.keys(this.state.deviceObjs).forEach(function(device_id) {
             var device = event.state.deviceObjs[device_id];
             var selected = (event.state.devices.indexOf(device_id) > -1);
-            console.log(device_id, selected);
             devices_selector.push(
                 <div onClick={ function() {event.selectDevice(device_id, !selected); } }>
                     <DeviceListCard id={ device_id } name={ device['name'] } selected={ selected } icon={ device['icon'] } color={ device['color'] } />
