@@ -1,4 +1,5 @@
 from . import db
+import bcrypt
 
 
 class PicoModel:
@@ -36,9 +37,20 @@ class User(PicoModel):
     private_fields = ["password"]
 
     def auth(self, password) -> bool:
-        if password == self['password']:
-            return True
-        return False
+        return bcrypt.checkpw(password.encode(), self['password'].encode())
+
+    @classmethod
+    def new(cls, username, password, admin):
+        if username in db['user']:
+            return True, "Username already taken"
+
+        salt = bcrypt.gensalt()
+
+        user = User(username, {
+            "admin": admin,
+            "password": bcrypt.hashpw(password.encode(), salt).decode()
+        })
+        user.save()
 
 
 class Device(PicoModel):
@@ -70,11 +82,16 @@ class Event(PicoModel):
     private_fields = []
 
     def action(self, action, action_data):
-        response = {
-            "enabled": action_data['enabled']
-        }
+        response = {}
 
-        keys = ["enabled"]
+        if action == "toggle_enabled":
+            response['enabled'] = action_data['enabled']
+        if action == "set_time":
+            response['time'] = action_data["time"]
+        if action == "set_weekday":
+            response['weekdays'] = action_data["weekdays"]
+
+        keys = ["enabled", "time", "weekdays"]
 
         for key in keys:
             if key in response:
