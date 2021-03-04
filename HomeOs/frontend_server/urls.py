@@ -7,4 +7,6 @@ urlpatterns = [
     path("logout", views.index),
     path("dev/<_>", views.index),
     path("programs", views.index),
+    path("events", views.index),
+    path("event/<_>", views.index),
 ]
