@@ -6,6 +6,7 @@ from .functions import random_string
 from datetime import datetime as dt
 from datetime import timedelta
 from .constants import DATETIME_STRING_FORMAT
+from datetime import datetime as dt
 import json
 
 
@@ -233,3 +234,32 @@ def event_delete(request):
             return json_response({"error": "Unknown event"})
 
     return json_response({"error": "Method not allowed"})
+
+
+def eventsping(request):
+    now = dt.now()
+
+    for event_id in db['event']:
+        event = db['event'][event_id]
+
+        if event['enabled'] and event['time']['hour'] == now.hour and event['time']['minute'] == now.minute and now.weekday() in event['weekdays']:
+            for device_id in event['devices']:
+                device = Device(device_id, db['device'][device_id])
+                error, response = device.action(
+                    event['action'],
+                    event['action_data']
+                )
+
+    return json_response({"succes": True})
+
+
+def trigger(request):
+    trigger = request.POST['trigger']
+
+    device = Device("ledstrip_bedroom_south", db['device']["ledstrip_bedroom_south"])
+    device.action(
+        "start_program",
+        {"program": trigger}
+    )
+
+    return json_response({"succes": True})
