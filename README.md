@@ -19,8 +19,13 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [X] Api authentication
 - [X] Get device programs from device on device start
 - [X] Template database on first start (Lol already did that appareantly)
-- [ ] Register for new users
+- [X] Register for new users
 - [X] Set up actions ( previously programs )
   - [X] Find a way to do it
   - [X] Implement it
 - [X] Multiple device login
+
+- [ ] Admin pannel
+  - [ ] Add/ remove devices
+  - [ ] Change programs
+  - [ ] Change users data
