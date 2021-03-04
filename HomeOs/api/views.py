@@ -125,27 +125,6 @@ def dev(request):
         return json_response({"error": "Unknown device"})
 
 
-def global_programs(request):
-    user = check_auth(request)
-    if user is None:
-        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
-
-    programs = {}
-
-    for program_id in user['programs']:
-        programs[program_id] = db['program'][program_id]
-
-    return json_response(programs)
-
-
-def program(request):
-    program_id = request.GET['program_id']
-
-    p = Program(program_id, db['program'][program_id])
-
-    return json_response(p.serialize())
-
-
 def events(request):
     user = check_auth(request)
     if user is None:

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import getIcon from '../scripts/get_icon';
+import readSnakeCase from '../scripts/read_snak_case';
 import { get, post } from '../scripts/server';
 
 
@@ -18,7 +19,7 @@ class Device extends Component {
             iconObj: null,
             active: false,
             color: "212121",
-            programs: {},
+            programs: [],
             active_program: null,
         };
 
@@ -27,7 +28,6 @@ class Device extends Component {
         this.selectColor = this.selectColor.bind(this);
         this.selectProgram = this.selectProgram.bind(this);
         this.getDeviceInfo = this.getDeviceInfo.bind(this);
-        this.getProgramsInfo = this.getProgramsInfo.bind(this);
     }
 
     componentDidMount() {
@@ -49,32 +49,10 @@ class Device extends Component {
                     color: data['color'],
                     iconObj: getIcon(data['icon'], "white"),
                     active_program: data['active_program'],
+                    programs: data['programs'],
                 });
-
-                device.getProgramsInfo(data['programs']);
             }
         );
-    }
-
-    getProgramsInfo(program_ids) {
-        var programs = {};
-        var device = this;
-        
-        program_ids.forEach(function(id) {
-            get(
-                "/program",
-                {
-                    "program_id": id,
-                },
-                function(data) {
-                    programs[id] = data;
-                    
-                    device.setState({
-                        programs: programs
-                    });
-                }
-            )
-        });
     }
 
     powerToggle() {
@@ -166,7 +144,7 @@ class Device extends Component {
         // Program picker buttons
         var program_picker_buttons = [];
         
-        Object.keys(this.state.programs).forEach(function(program_id) {
+        this.state.programs.forEach(function(program_id) {
             var activeClass = "";
 
             if (device.state.active_program === program_id) {
@@ -175,7 +153,7 @@ class Device extends Component {
 
             program_picker_buttons.push(
                 <button key={ `program_picker_button_${program_id}` } className={ "program_picker_button " + activeClass } onClick={ function() {device.selectProgram(program_id) }}>
-                    { device.state.programs[program_id]['name'] }
+                    { readSnakeCase(program_id) }
                 </button>
             );
         });
