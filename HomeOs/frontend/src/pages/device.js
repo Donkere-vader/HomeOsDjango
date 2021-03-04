@@ -19,7 +19,7 @@ class Device extends Component {
             active: false,
             color: "212121",
             programs: {},
-            activeProgram: null,
+            active_program: null,
         };
 
         // Bind methods
@@ -48,7 +48,7 @@ class Device extends Component {
                     description: data['description'],
                     color: data['color'],
                     iconObj: getIcon(data['icon'], "white"),
-                    activeProgram: data['active_program'],
+                    active_program: data['active_program'],
                 });
 
                 device.getProgramsInfo(data['programs']);
@@ -91,9 +91,7 @@ class Device extends Component {
                 ),
             },
             function(data) {
-                device.setState({
-                    active: data['response']['active'],
-                });
+                device.setState(data['response']);
             }
         )        
     }
@@ -112,9 +110,7 @@ class Device extends Component {
                 ),
             },
             function(data) {
-                device.setState({
-                    color: data['response']['color'],
-                });
+                device.setState(data['response']);
             }
         )   
     }
@@ -133,9 +129,7 @@ class Device extends Component {
                 ),
             },
             function(data) {
-                device.setState({
-                    activeProgram: data['response']['active_program'],
-                });
+                device.setState(data['response']);
             }
         )  
     }
@@ -175,7 +169,7 @@ class Device extends Component {
         Object.keys(this.state.programs).forEach(function(program_id) {
             var activeClass = "";
 
-            if (device.state.activeProgram === program_id) {
+            if (device.state.active_program === program_id) {
                 activeClass = "active";
             }
 

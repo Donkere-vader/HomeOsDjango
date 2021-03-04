@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { getAuthData } from '../scripts/auth';
 
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "/api";
 
 
 function post(url, user_data, handler, authenticated=true) {

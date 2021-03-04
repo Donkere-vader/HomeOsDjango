@@ -26,7 +26,6 @@ class Events extends Component {
             "/events",
             {},
             function(data) {
-                console.log(data);
                 events.setState({
                     events: data
                 });

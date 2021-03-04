@@ -10,8 +10,8 @@ function auth(username, password) {
             password: password,
         },
         function(data) {
-            Cookies.set("username", username, { expires: 100, path: '/', sameSite: "strict", secure: true });
-            Cookies.set("key", data['key'], { expires: 100, path: '/', sameSite: "strict", secure: true })
+            Cookies.set("username", username, { expires: 100, path: '/', sameSite: "strict" });
+            Cookies.set("key", data['key'], { expires: 100, path: '/', sameSite: "strict" })
             
             window.location = "/";
         },

@@ -113,7 +113,10 @@ class Event extends Component {
     }
 
     setTime() {
-        var hour = $("#event_hour_input").val();
+        console.log("settings time");
+        var hour = Number($("#event_hour_input").val());
+
+        console.log($("#event_hour_input").val(), hour);
 
         if (hour === "") {
             hour = this.state.time['hour'];
@@ -122,7 +125,9 @@ class Event extends Component {
             );
         }
 
-        var minute = $("#event_minute_input").val();
+        var minute = Number($("#event_minute_input").val());
+
+        console.log($("#event_minute_input").val(), minute);
 
         if (minute === "") {
             minute = this.state.time['minute'];
@@ -214,7 +219,22 @@ class Event extends Component {
 
     setAction() {
         var action = $("#action_input").val();
-        console.log(action);
+
+        var event = this;
+        
+        post(
+            "/event",
+            {
+                "event_id": this.event_id,
+                "action": "set_action",
+                "action_data": JSON.stringify({
+                    "action": action,
+                }),
+            },
+            function(data) {
+                event.setState(data['response']);
+            }
+        );
     }
 
     setActionData() {
@@ -224,6 +244,12 @@ class Event extends Component {
             var key = $(`#action_data_${ id }_key_input`).val();
             var value = $(`#action_data_${ id }_value_input`).val();
             
+            if (value === "false") {
+                value = false;
+            } else if (value === "true") {
+                value = true;
+            }
+
             if (key) {
                 action_data[key] = value;
             }
