@@ -17,7 +17,8 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 
 - [X] Schedular
 - [X] Api authentication
-- [ ] Get device programs from device on device start
+- [X] Get device programs from device on device start
+- [ ] Templace database on first start
 - [X] Set up actions ( previously programs )
   - [X] Find a way to do it
   - [X] Implement it
