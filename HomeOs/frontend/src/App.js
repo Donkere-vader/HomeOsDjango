@@ -18,7 +18,7 @@ import './static/css/app.css';
 import LoginPage from "./pages/login";
 import LogoutPage from "./pages/logout";
 import Events from "./pages/events";
-import Programs from "./pages/programs";
+import Actions from "./pages/actions";
 import Event from "./pages/event";
 
 
@@ -32,7 +32,7 @@ function App() {
         <Route path="/event/:event_id" component={ Event } />
 
         {/* Normal routes */}
-        <Route path="/programs" component={ Programs } />
+        <Route path="/actions" component={ Actions } />
         <Route path="/events" component={ Events } />
 
         {/* Auth */}

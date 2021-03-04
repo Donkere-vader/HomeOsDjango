@@ -26,7 +26,10 @@ def check_auth(request):
             return None
 
     if 'api_key' in request_data:
-        pass
+        key = request_data['api_key']
+
+        if key in db['api_key']:
+            return "api"
 
     return None
 
@@ -243,17 +246,23 @@ def eventsping(request):
     return json_response({"succes": True})
 
 
-def trigger(request):
+def action(request):
     user = check_auth(request)
     if user is None:
         return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
-    trigger = request.POST['trigger']
+    event_id = request.POST['event_id']
 
-    device = Device("ledstrip_bedroom_south", db['device']["ledstrip_bedroom_south"])
-    device.action(
-        "start_program",
-        {"program": trigger}
-    )
+    if event_id in db['event']:
+        event = Event(event_id, db['event'][event_id])
 
-    return json_response({"succes": True})
+        for device_id in event['devices']:
+            device = Device(device_id, db['device'][device_id])
+            error, response = device.action(
+                event['action'],
+                event['action_data']
+            )
+
+        return json_response({"succes": True})
+
+    return json_response({"error": "Unknwon action"})

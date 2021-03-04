@@ -10,7 +10,7 @@ urlpatterns = [
     path('event', views.event),
     path('events', views.events),
     path('eventsping', views.eventsping),
-    path('trigger', views.trigger),
+    path('action', views.action),
     path('event/new', views.event_new),
     path('event/delete', views.event_delete),
 ]

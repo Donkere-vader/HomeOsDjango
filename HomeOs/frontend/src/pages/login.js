@@ -20,7 +20,7 @@ function LoginPage() {
                 <h3>Login</h3>
 
                 <label htmlFor="username_input">Username: </label>
-                <input type="text" name="username" id="username_input" autocomplete="off" />
+                <input type="text" name="username" id="username_input" autoComplete="off" />
 
                 <label htmlFor="password_input">Password: </label>
                 <input type="password" name="password" id="password_input"/>
