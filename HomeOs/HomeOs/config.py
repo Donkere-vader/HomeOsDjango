@@ -2,7 +2,8 @@ import json
 
 KEYS = {
     "ALLOWED_HOSTS": [],
-    "TIME_ZONE": "UTC"
+    "TIME_ZONE": "UTC",
+    "DEBUG": False
 }
 
 setup = False
