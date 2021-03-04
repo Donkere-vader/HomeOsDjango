@@ -224,6 +224,9 @@ def eventsping(request):
     for event_id in db['event']:
         event = db['event'][event_id]
 
+        if not event['planned']:
+            continue
+
         if event['enabled'] and event['time']['hour'] == now.hour and event['time']['minute'] == now.minute and now.weekday() in event['weekdays']:
             for device_id in event['devices']:
                 device = Device(device_id, db['device'][device_id])
