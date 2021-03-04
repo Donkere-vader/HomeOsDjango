@@ -6,6 +6,9 @@ import whiteSaveIcon from '../static/icons/save_white.svg';
 import blackSaveIcon from '../static/icons/save_black.svg'
 import whiteAddIcon from '../static/icons/add_white.svg';
 import blackAddIcon from '../static/icons/add_black.svg';
+import whiteArrowRightIcon from '../static/icons/arrow_right_white.svg';
+import blackArrowRightIcon from '../static/icons/arrow_right_black.svg';
+
 
 const ICONS = {
     "light": {
@@ -23,6 +26,10 @@ const ICONS = {
     "add": {
         "black": blackAddIcon,
         "white": whiteAddIcon,
+    },
+    "arrow_right": {
+        "black":  blackArrowRightIcon,
+        "white": whiteArrowRightIcon,
     },
 }
 

@@ -21,6 +21,8 @@ import Events from "./pages/events";
 import Actions from "./pages/actions";
 import Event from "./pages/event";
 import RegisterPage from "./pages/register";
+import Admin from "./pages/admin";
+
 
 
 function App() {
@@ -35,6 +37,7 @@ function App() {
         {/* Normal routes */}
         <Route path="/actions" component={ Actions } />
         <Route path="/events" component={ Events } />
+        <Route path="/admin" component={ Admin } />
 
         {/* Auth */}
         <Route path="/login" component={ LoginPage } />

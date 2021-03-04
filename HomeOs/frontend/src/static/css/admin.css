@@ -1,0 +1,21 @@
+.admin_page .key_list .key_option, .admin_page .key_list .key_input {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #424242;
+    cursor: pointer;
+}
+
+.admin_page .key_list .key_option span, .admin_page .key_list .key_input span {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.admin_page .key_list .key_option img {
+    height: 25px;
+}
+
+.admin_page .key_list .key_option:hover {
+    background-color: #FFFFFF04;
+}
