@@ -10,7 +10,7 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 
 - [X] Encrypt passwords using bctypt
 - [X] Programs pages
-- [ ] Clean up views.py
+- [X] Clean up views.py
 - [X] New?
   - [X] New event from UI?
   - [X] Delete event from UI?

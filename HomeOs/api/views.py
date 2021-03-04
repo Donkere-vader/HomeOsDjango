@@ -6,8 +6,27 @@ from .functions import random_string
 from datetime import datetime as dt
 from datetime import timedelta
 from .constants import DATETIME_STRING_FORMAT
-from datetime import datetime as dt
 import json
+
+
+def check_auth(request):
+    if request.method == "POST":
+        request_data = request.POST.dict()
+    elif request.method == "GET":
+        request_data = request.GET.dict()
+
+    if 'auth_username' in request_data and 'auth_key' in request_data:
+        username = request_data['auth_username']
+        key = request_data['auth_key']
+
+        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+            user = User(username, db['user'][username])
+            return user
+
+    if 'api_key' in request_data:
+        pass
+
+    return None
 
 
 # VIEWS
@@ -34,204 +53,167 @@ def auth(request):
 
 
 def devices(request):
-    username = request.GET['auth_username']
-    key = request.GET['auth_key']
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
-    if username in db['user'] and db['auth_keys'][username]['key'] == key:
-        user = User(username, db['user'][username])
+    devices = {}
 
-        devices = {}
+    for dev_id in user['devices']:
+        devices[dev_id] = Device(dev_id, db['device'][dev_id]).serialize(
+            fields=[
+                "name",
+                "description",
+                "active",
+                "icon",
+                "color",
+            ]
+        )
 
-        for dev_id in user['devices']:
-            devices[dev_id] = Device(dev_id, db['device'][dev_id]).serialize(
-                fields=[
-                    "name",
-                    "description",
-                    "active",
-                    "icon",
-                    "color",
-                ]
-            )
-
-        return json_response(devices)
-
-    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+    return json_response(devices)
 
 
 def dev(request):
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
     if request.method == "GET":
-        username = request.GET['auth_username']
-        key = request.GET['auth_key']
         device_id = request.GET['device_id']
 
-        if username in db['user'] and db['auth_keys'][username]['key'] == key:
-            user = User(username, db['user'][username])
+        if device_id in db['user'][user.id]['devices']:
+            device = Device(device_id, db['device'][device_id])
 
-            if device_id in db['user'][username]['devices']:
-                device = Device(device_id, db['device'][device_id])
+            return json_response(device.serialize(
+                fields=[
+                    "name",
+                    "description",
+                    "programs",
+                    "active",
+                    "color",
+                    "icon",
+                    "active_program",
+                ]
+            ))
+        return json_response({"error": "Unknown device"})
 
-                return json_response(device.serialize(
-                    fields=[
-                        "name",
-                        "description",
-                        "programs",
-                        "active",
-                        "color",
-                        "icon",
-                        "active_program",
-                    ]
-                ))
-            return json_response({"error": "Unknown device"})
-
-        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
     elif request.method == "POST":
-        username = request.POST['auth_username']
-        key = request.POST['auth_key']
         device_id = request.POST['device_id']
         action = request.POST['action']
         action_data = json.loads(request.POST['action_data'])
 
-        if username in db['user'] and db['auth_keys'][username]['key'] == key:
-            user = User(username, db['user'][username])
+        if device_id in user['devices']:
+            device = Device(device_id, db['device'][device_id])
 
-            if device_id in user['devices']:
-                device = Device(device_id, db['device'][device_id])
+            error, response = device.action(action, action_data)
 
-                error, response = device.action(action, action_data)
+            return json_response({"error": error, "response": response})
 
-                return json_response({"error": error, "response": response})
-
-            return json_response({"error": "Unknown device"})
-
-        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+        return json_response({"error": "Unknown device"})
 
 
 def global_programs(request):
-    username = request.GET['auth_username']
-    key = request.GET['auth_key']
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
-    if username in db['user'] and db['auth_keys'][username]['key'] == key:
-        user = User(username, db['user'][username])
+    programs = {}
 
-        programs = {}
+    for program_id in user['programs']:
+        programs[program_id] = db['program'][program_id]
 
-        for program_id in user['programs']:
-            programs[program_id] = db['program'][program_id]
-
-        return json_response(programs)
-
-    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+    return json_response(programs)
 
 
 def program(request):
-    username = request.GET['auth_username']
-    key = request.GET['auth_key']
     program_id = request.GET['program_id']
 
-    if username in db['user'] and db['auth_keys'][username]['key'] == key:
-        p = Program(program_id, db['program'][program_id])
+    p = Program(program_id, db['program'][program_id])
 
-        return json_response(p.serialize())
-
-    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+    return json_response(p.serialize())
 
 
 def events(request):
-    username = request.GET['auth_username']
-    key = request.GET['auth_key']
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
 
-    if username in db['user'] and db['auth_keys'][username]['key'] == key:
-        user = User(username, db['user'][username])
+    events = {}
 
-        events = {}
+    for event_id in user['events']:
+        events[event_id] = Event(event_id, db['event'][event_id]).serialize(
+            fields=[
+                "name",
+                "enabled",
+                "time"
+            ]
+        )
 
-        for event_id in user['events']:
-            events[event_id] = Event(event_id, db['event'][event_id]).serialize(
-                fields=[
-                    "name",
-                    "enabled",
-                    "time"
-                ]
-            )
-
-        return json_response(events)
-
-    return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+    return json_response(events)
 
 
 def event(request):
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
     if request.method == "GET":
-        username = request.GET['auth_username']
-        key = request.GET['auth_key']
         event_id = request.GET['event_id']
 
-        if username in db['user'] and db['auth_keys'][username]['key'] == key:
-            user = User(username, db['user'][username])
+        if event_id in user['events']:
+            event = Event(event_id, db['event'][event_id])
+            return json_response(event.serialize())
 
-            if event_id in user['events']:
-                event = Event(event_id, db['event'][event_id])
-                return json_response(event.serialize())
+        return json_response({"error": "Unknown event"})
 
-            return json_response({"error": "Unknown event"})
-
-        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
     elif request.method == "POST":
-        username = request.POST['auth_username']
-        key = request.POST['auth_key']
         event_id = request.POST['event_id']
         action = request.POST['action']
         action_data = json.loads(request.POST['action_data'])
 
-        if username in db['user'] and db['auth_keys'][username]['key'] == key:
-            user = User(username, db['user'][username])
+        if event_id in user['events']:
+            event = Event(event_id, db['event'][event_id])
 
-            if event_id in user['events']:
-                event = Event(event_id, db['event'][event_id])
+            error, response = event.action(action, action_data)
 
-                error, response = event.action(action, action_data)
+            return json_response({"error": error, "response": response})
 
-                return json_response({"error": error, "response": response})
-
-            return json_response({"error": "Unknown event"})
-
-        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+        return json_response({"error": "Unknown event"})
 
 
 def event_new(request):
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
     if request.method == "POST":
-        username = request.POST['auth_username']
-        key = request.POST['auth_key']
+        error, new_event = Event.new()
 
-        if username in db['user'] and db['auth_keys'][username]['key'] == key:
-            user = User(username, db['user'][username])
-            error, new_event = Event.new()
+        user['events'].append(new_event.id)
+        user.save()
 
-            user['events'].append(new_event.id)
-            user.save()
-
-            return json_response({
-                "error": error,
-                "response": {"id": new_event.id}
-            })
+        return json_response({
+            "error": error,
+            "response": {"id": new_event.id}
+        })
 
     return json_response({"error": "Method not allowed"})
 
 
 def event_delete(request):
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
     if request.method == "POST":
-        username = request.POST['auth_username']
-        key = request.POST['auth_key']
         event_id = request.POST['event_id']
 
-        if username in db['user'] and db['auth_keys'][username]['key'] == key:
-            user = User(username, db['user'][username])
+        if event_id in user['events']:
+            event = Event(event_id, db['event'][event_id])
+            error = event.delete()
+            return json_response({"error": error})
 
-            if event_id in user['events']:
-                event = Event(event_id, db['event'][event_id])
-                error = event.delete()
-                return json_response({"error": error})
-
-            return json_response({"error": "Unknown event"})
+        return json_response({"error": "Unknown event"})
 
     return json_response({"error": "Method not allowed"})
 
@@ -254,6 +236,10 @@ def eventsping(request):
 
 
 def trigger(request):
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
     trigger = request.POST['trigger']
 
     device = Device("ledstrip_bedroom_south", db['device']["ledstrip_bedroom_south"])
