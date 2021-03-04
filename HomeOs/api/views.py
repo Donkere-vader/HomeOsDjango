@@ -19,9 +19,11 @@ def check_auth(request):
         username = request_data['auth_username']
         key = request_data['auth_key']
 
-        if username in db['user'] and db['auth_keys'][username]['key'] == key:
+        if username in db['user']:
             user = User(username, db['user'][username])
-            return user
+            if user.verify_key(key):
+                return user
+            return None
 
     if 'api_key' in request_data:
         pass
@@ -40,14 +42,17 @@ def auth(request):
     if username in db['user']:
         user = User(username, db['user'][username])
         if user.auth(password):
-            db['auth_keys'][username] = {
-                "key": random_string(length=20),
+            new_key = random_string(length=20)
+            db['user'][username]['auth_keys'][new_key] = {
                 "expires": (dt.now() + timedelta(days=100)).strftime(DATETIME_STRING_FORMAT)
             }
 
             db.commit()
 
-            return json_response(db['auth_keys'][username])
+            return json_response({
+                "username": user.id,
+                "key": new_key,
+            })
 
     return json_response({"error": "Invalid username or password"})
 

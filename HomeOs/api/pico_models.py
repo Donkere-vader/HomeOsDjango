@@ -1,6 +1,8 @@
 from . import db
 import bcrypt
 from .functions import random_string
+from .constants import DATETIME_STRING_FORMAT
+from datetime import datetime as dt
 
 
 class PicoModel:
@@ -40,8 +42,22 @@ class User(PicoModel):
     def auth(self, password) -> bool:
         return bcrypt.checkpw(password.encode(), self['password'].encode())
 
+    def verify_key(self, key):
+        verified = False
+        keys = self['auth_keys'].copy()  # to not change size of dict while iterating
+        for k in keys:
+            expires = self['auth_keys'][k]['expires']
+            if dt.now() < dt.strptime(expires, DATETIME_STRING_FORMAT):
+                if k == key:
+                    verified = True
+            else:
+                del self['auth_keys'][k]
+
+        self.save()
+        return verified
+
     @classmethod
-    def new(cls, username, password, admin):
+    def new(cls, username, password, admin=False):
         if username in db['user']:
             return True, "Username already taken"
 
@@ -49,7 +65,11 @@ class User(PicoModel):
 
         user = User(username, {
             "admin": admin,
-            "password": bcrypt.hashpw(password.encode(), salt).decode()
+            "password": bcrypt.hashpw(password.encode(), salt).decode(),
+            "devices": [],
+            "programs": [],
+            "events": [],
+            "auth_keys": {}
         })
         user.save()
 
