@@ -113,10 +113,7 @@ class Event extends Component {
     }
 
     setTime() {
-        console.log("settings time");
         var hour = Number($("#event_hour_input").val());
-
-        console.log($("#event_hour_input").val(), hour);
 
         if (hour === "") {
             hour = this.state.time['hour'];
@@ -126,8 +123,6 @@ class Event extends Component {
         }
 
         var minute = Number($("#event_minute_input").val());
-
-        console.log($("#event_minute_input").val(), minute);
 
         if (minute === "") {
             minute = this.state.time['minute'];
