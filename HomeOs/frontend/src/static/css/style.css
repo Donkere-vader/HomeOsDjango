@@ -30,6 +30,7 @@ main {
 .vertical-center {
     display: flex;
     align-items: center;
+    height: 100%;
 }
 
 .no-link {

@@ -20,6 +20,7 @@ import LogoutPage from "./pages/logout";
 import Events from "./pages/events";
 import Actions from "./pages/actions";
 import Event from "./pages/event";
+import RegisterPage from "./pages/register";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
 
         {/* Auth */}
         <Route path="/login" component={ LoginPage } />
+        <Route path="/register" component={ RegisterPage } />
         <Route path="/logout" component={ LogoutPage } />
 
         {/* Index */}

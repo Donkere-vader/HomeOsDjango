@@ -60,6 +60,18 @@ def auth(request):
     return json_response({"error": "Invalid username or password"})
 
 
+def register(request):
+    username = request.POST['username']
+    password = request.POST['password']
+
+    if username in db['user']:
+        return json_response({"form_error": "Username is already in use"})
+
+    user = User.new(username, password)
+
+    return json_response({"success": True})
+
+
 def devices(request):
     user = check_auth(request)
     if user is None:

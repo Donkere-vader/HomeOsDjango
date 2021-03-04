@@ -3,6 +3,7 @@ import api.views as views
 
 urlpatterns = [
     path('auth', views.auth),
+    path('register', views.register),
     path('devices', views.devices),
     path('dev', views.dev),
     path('event', views.event),

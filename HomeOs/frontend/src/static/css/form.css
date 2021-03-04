@@ -30,3 +30,15 @@
     color: #FFFFFF;
     cursor: pointer;
 }
+
+.form_error {
+    background-color:rgb(255, 36, 36);
+    margin: 10px 0px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.form_error span {
+    font-size: 18px;
+    font-weight: bold;
+}

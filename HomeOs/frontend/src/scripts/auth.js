@@ -16,7 +16,7 @@ function auth(username, password) {
             window.location = "/";
         },
         false
-    )
+    );
 }
 
 
