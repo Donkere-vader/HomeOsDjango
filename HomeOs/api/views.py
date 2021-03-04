@@ -67,7 +67,12 @@ def devices(request):
 
     devices = {}
 
-    for dev_id in user['devices']:
+    if user['admin']:
+        devices_list = db['device']
+    else:
+        devices_list = user['devices']
+
+    for dev_id in devices_list:
         devices[dev_id] = Device(dev_id, db['device'][dev_id]).serialize(
             fields=[
                 "name",
@@ -89,7 +94,7 @@ def dev(request):
     if request.method == "GET":
         device_id = request.GET['device_id']
 
-        if device_id in db['user'][user.id]['devices']:
+        if device_id in db['user'][user.id]['devices'] or user['admin']:
             device = Device(device_id, db['device'][device_id])
 
             return json_response(device.serialize(
@@ -110,7 +115,7 @@ def dev(request):
         action = request.POST['action']
         action_data = json.loads(request.POST['action_data'])
 
-        if device_id in user['devices']:
+        if device_id in user['devices'] or user['admin']:
             device = Device(device_id, db['device'][device_id])
 
             error, response = device.action(action, action_data)
@@ -148,7 +153,12 @@ def events(request):
 
     events = {}
 
-    for event_id in user['events']:
+    if user['admin']:
+        events_list = db['event']
+    else:
+        events_list = user['events']
+
+    for event_id in events_list:
         events[event_id] = Event(event_id, db['event'][event_id]).serialize(
             fields=[
                 "name",
@@ -168,7 +178,7 @@ def event(request):
     if request.method == "GET":
         event_id = request.GET['event_id']
 
-        if event_id in user['events']:
+        if event_id in user['events'] or user['admin']:
             event = Event(event_id, db['event'][event_id])
             return json_response(event.serialize())
 
@@ -179,7 +189,7 @@ def event(request):
         action = request.POST['action']
         action_data = json.loads(request.POST['action_data'])
 
-        if event_id in user['events']:
+        if event_id in user['events'] or user['admin']:
             event = Event(event_id, db['event'][event_id])
 
             error, response = event.action(action, action_data)
@@ -253,7 +263,7 @@ def action(request):
 
     event_id = request.POST['event_id']
 
-    if event_id in db['event']:
+    if event_id in db['event'] and (event_id in user['events'] or user['admin']):
         event = Event(event_id, db['event'][event_id])
 
         for device_id in event['devices']:
@@ -265,4 +275,4 @@ def action(request):
 
         return json_response({"succes": True})
 
-    return json_response({"error": "Unknwon action"})
+    return json_response({"error": "Unknown action"})
