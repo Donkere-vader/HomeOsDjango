@@ -1,11 +1,12 @@
 import atexit
 import requests
+from . import config
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
 
 def ping():
-    requests.post("http://localhost:5000/api/eventsping")
+    requests.post(f"http://localhost:{config.PORT}/api/eventsping")
 
 
 def schedule_background_tasks():
