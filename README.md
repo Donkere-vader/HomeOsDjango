@@ -16,8 +16,9 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
   - [X] Delete event from UI?
 
 - [X] Schedular
+- [ ] Api authentication
 - [ ] Get device programs from device on device start
 - [ ] Set up triggers ( previously programs )
   - [ ] Find a way to do it
   - [ ] Implement it
-- [ ] Multiple device login
+- [X] Multiple device login
