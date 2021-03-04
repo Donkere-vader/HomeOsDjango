@@ -9,7 +9,8 @@ node_modules
 build
 
 # Project
-*/database.json
+database.json
+server_config.json
 
 # Personal
 dog
