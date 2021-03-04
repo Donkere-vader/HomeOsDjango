@@ -369,7 +369,7 @@ class Event extends Component {
         });
 
         return (
-            <main>
+            <main className="horizontal-center">
                 <div className="card event_page">
                     <div className={ "event_name" + (this.state.enabled ? " active" : "")}>
                         { event_name }
