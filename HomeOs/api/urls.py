@@ -9,6 +9,8 @@ urlpatterns = [
     path('global_programs', views.global_programs),
     path('event', views.event),
     path('events', views.events),
+    path('eventsping', views.eventsping),
+    path('trigger', views.trigger),
     path('event/new', views.event_new),
     path('event/delete', views.event_delete),
 ]
