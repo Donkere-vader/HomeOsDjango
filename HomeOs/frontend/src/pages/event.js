@@ -27,6 +27,7 @@ class Event extends Component {
             name: "Loading...",
             eventName: "Loading...",
             enabled: false,
+            planned: true,
             time: {
                 hour: 0,
                 minute: 0,
@@ -45,6 +46,7 @@ class Event extends Component {
         this.action_data_ids = [];
 
         this.toggleEnabled = this.toggleEnabled.bind(this);
+        this.togglePlanned = this.togglePlanned.bind(this);
         this.setTime = this.setTime.bind(this);
         this.setWeekday = this.setWeekday.bind(this);
         this.getDevicesInfo = this.getDevicesInfo.bind(this);
@@ -108,6 +110,23 @@ class Event extends Component {
                 event.setState({
                     enabled: data['response']['enabled'],
                 });
+            }
+        );
+    }
+
+    togglePlanned() {
+        var event = this;
+        post(
+            "/event",
+            {
+                "event_id": this.event_id,
+                "action": "toggle_planned",
+                "action_data": JSON.stringify({
+                    "planned": !this.state.planned,
+                }),
+            },
+            function(data) {
+                event.setState(data['response']);
             }
         );
     }
@@ -373,23 +392,29 @@ class Event extends Component {
                 <div className="card event_page">
                     <div className={ "event_name" + (this.state.enabled ? " active" : "")}>
                         { event_name }
-                        <span className="timestamp">{ this.state.hour }:{ this.state.minute }</span>
+                        { this.state.planned ? (<span className="timestamp">{ this.state.hour }:{ this.state.minute }</span>) : <span></span> }
                     </div>
                     <div className="event_control">
                         <h2>Control event</h2>
                         <button className={ "big_button" + (this.state.enabled ? " active" : "") } onClick={ this.toggleEnabled }>{ this.state.enabled ? "Disable" : "Enable" }</button>
 
-                        <h4>Time</h4>
-                        <div className="time_selector">
-                            <input id="event_hour_input" onChange={ this.setTime } type="number" min="0" max="23" placeholder={ this.state.time['hour'] } />
-                            <span>:</span>
-                            <input id="event_minute_input" onChange={ this.setTime } type="number" min="0" max="59" placeholder={ this.state.time['minute'] } />
-                        </div>
+                        <h3>Event planning</h3>
+                        { this.state.planned && <div className="container">
+                            <h4>Time</h4>
+                            <div className="time_selector">
+                                <input id="event_hour_input" onChange={ this.setTime } type="number" min="0" max="23" placeholder={ this.state.time['hour'] } />
+                                <span>:</span>
+                                <input id="event_minute_input" onChange={ this.setTime } type="number" min="0" max="59" placeholder={ this.state.time['minute'] } />
+                            </div>
 
-                        <h4>Weekdays</h4>
-                        <div className="weekday_selector">
-                            { weekdays_selector }
-                        </div>
+                            <h4>Weekdays</h4>
+                            <div className="weekday_selector">
+                                { weekdays_selector }
+                            </div>
+                        </div> }
+
+                        <div style={{ height: "10px" }}></div>
+                        <button onClick={ this.togglePlanned }className={ "big_button" + (this.state.planned ? " active" : "") }>{ this.state.planned ? "Make event unplanned" : "Make event planned"}</button>
 
                         <h4>Devices</h4>
                         <div className="devices_list">

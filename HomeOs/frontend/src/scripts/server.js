@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { getAuthData } from '../scripts/auth';
 
 
-const API_URL = "/api";
+const API_URL = "http://localhost:8000/api";
 
 
 function post(url, user_data, handler, authenticated=true) {
@@ -37,6 +37,7 @@ function get(url, user_data, handler) {
         API_URL + url,
         data,
         function(data) {
+            console.log(data);
             if ('error' in data) {
                 if ('error_action' in data) {
                     var action = data['error_action'];

@@ -87,6 +87,8 @@ class Event(PicoModel):
 
         if action == "toggle_enabled":
             response['enabled'] = action_data['enabled']
+        elif action == "toggle_planned":
+            response['planned'] = action_data['planned']
         elif action == "set_time":
             response['time'] = action_data["time"]
         elif action == "set_weekday":
@@ -98,7 +100,7 @@ class Event(PicoModel):
         elif action == "set_name":
             response['name'] = action_data["name"]
 
-        keys = ["enabled", "time", "weekdays", "devices", "action_data"]
+        keys = ["enabled", "time", "weekdays", "devices", "action_data", "action", "name", "planned"]
 
         for key in keys:
             if key in response:
@@ -129,6 +131,7 @@ class Event(PicoModel):
             "name": "New event",
             "enabled": True,
             "weekdays": [],
+            "planned": True,
             "time": {
                 "hour": 12,
                 "minute": 0,

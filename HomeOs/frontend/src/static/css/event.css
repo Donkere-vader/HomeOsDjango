@@ -59,14 +59,18 @@
     width: 100%;
 }
 
-.event_page .event_control {
+.event_page .event_control, .event_page .event_control .container {
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.event_page .event_control h4 {
+.event_page .event_control .container {
+    padding: 0;
+}
+
+.event_page .event_control h4, .event_page .event_control .container h4 {
     margin-top: 20px;
 }
 
