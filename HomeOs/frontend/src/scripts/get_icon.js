@@ -8,6 +8,10 @@ import whiteAddIcon from '../static/icons/add_white.svg';
 import blackAddIcon from '../static/icons/add_black.svg';
 import whiteArrowRightIcon from '../static/icons/arrow_right_white.svg';
 import blackArrowRightIcon from '../static/icons/arrow_right_black.svg';
+import whiteArrowLeftIcon from '../static/icons/arrow_left_white.svg';
+import blackArrowLeftIcon from '../static/icons/arrow_left_black.svg';
+import whiteHomeIcon from '../static/icons/home_white.svg';
+import blackHomeIcon from '../static/icons/home_black.svg'
 
 
 const ICONS = {
@@ -30,6 +34,14 @@ const ICONS = {
     "arrow_right": {
         "black":  blackArrowRightIcon,
         "white": whiteArrowRightIcon,
+    },
+    "arrow_left": {
+        "black":  blackArrowLeftIcon,
+        "white": whiteArrowLeftIcon,
+    },
+    "home": {
+        "black":  blackHomeIcon,
+        "white": whiteHomeIcon,
     },
 }
 

@@ -20,9 +20,10 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [X] Get device programs from device on device start
 - [X] Template database on first start (Lol already did that appareantly)
 - [X] Register for new users
-- [X] Set up actions ( previously programs )
+- [ ] Set up actions ( previously programs )
   - [X] Find a way to do it
   - [X] Implement it
+  - [ ] Visual feedback for starting an action
 - [X] Multiple device login
 
 - [ ] Admin pannel
@@ -31,3 +32,4 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
   - [ ] Add/ remove devices
   - [ ] Change programs
   - [ ] Change users data
+  - [ ] Add admin panel to frontend server routes

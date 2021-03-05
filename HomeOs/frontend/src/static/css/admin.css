@@ -12,10 +12,31 @@
     font-weight: bold;
 }
 
+.admin_page .key_list .key_input input {
+    background: none;
+    border: none;
+    font-size: 18px;
+    padding: 5px;
+    color: #FFFFFF;
+    border-bottom: 2px solid orangered;
+}
+
 .admin_page .key_list .key_option img {
     height: 25px;
 }
 
 .admin_page .key_list .key_option:hover {
     background-color: #FFFFFF04;
+}
+
+.browse_header {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid #424242;
+}
+
+.browse_header img {
+    height: 35px;
+    cursor: pointer;
 }

@@ -1,6 +1,7 @@
 import React, { Component }  from 'react';
 import getIcon from '../scripts/get_icon';
 import '../static/css/admin.css';
+import $ from 'jquery';
 
 
 class Admin extends Component {
@@ -11,14 +12,20 @@ class Admin extends Component {
             databaseObj: {
                 "hello": 1,
                 "hello2": {
-                    "world": "yes",
+                    "world": {
+                        "people": 17000000000,
+                        "what": "yes",
+                    },
                     "poep": false
                 }
             },
-            path: []
+            path: [],
+            changes: false,
         }
         
         this.getCurrentKeys = this.getCurrentKeys.bind(this);
+        this.keyValueChange = this.keyValueChange.bind(this);
+        this.save = this.save.bind(this);
     }
 
     componentDidMount() {
@@ -35,8 +42,28 @@ class Admin extends Component {
         return obj;
     }
 
+    keyValueChange(key) {
+        var value = $(`#key_input_${key}`).val()
+
+        if (value === "false") {
+            value = false;
+        } else if (value === "true") {
+            value = true;
+        } else if (!isNaN(Number(value))) {
+            value = Number(value);
+        }
+
+        this.getCurrentKeys()[key] = value;
+        this.setState({
+            changes: true,
+        });
+    }
+
+    save() {
+
+    }
+
     render() {
-        console.log(this.state.path);
         var key_list = [];
         var ths = this;
 
@@ -59,7 +86,11 @@ class Admin extends Component {
                 key_list.push(
                     <div key={ key } className="key_input" >
                         <span>{ key }</span>
-                        <input type="text" name={ `key_input_${key}` } id={ `key_input_${key}` } defaultValue={ keys[key] } />
+                        <input type="text" name={ `key_input_${key}` } id={ `key_input_${key}` } defaultValue={ keys[key] }  onChange={
+                            function() {
+                                ths.keyValueChange(key);
+                            }
+                        } />
                     </div>
                 );
             }
@@ -67,8 +98,13 @@ class Admin extends Component {
 
         return (
             <div className="admin_page">
-                <div className="header">
-                    <img src={ getIcon("arrow_right", "white") } alt="" onClick={ function() {
+                <div className="browse_header">
+                    <img src={ getIcon("home", "white") } alt="" onClick={ function() {
+                        ths.setState({
+                            path: [],
+                        });
+                    }}/>
+                    <img src={ getIcon("arrow_left", "white") } alt="" onClick={ function() {
                         ths.state.path.splice(-1,1);
                         ths.setState({
                             path: ths.state.path,
@@ -78,6 +114,10 @@ class Admin extends Component {
                 <div className="key_list">
                     { key_list }
                 </div>
+                { this.state.changes && 
+                <div id="floating_action_button" onClick={ this.save }>
+                    <img src={ getIcon("save", "white") } alt=""/>
+                </div> }
             </div>
         )
     }
