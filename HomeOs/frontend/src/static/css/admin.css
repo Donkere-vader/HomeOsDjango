@@ -29,6 +29,10 @@
     cursor: pointer;
 }
 
+.admin_page .key_list .key_option .input button.delete {
+    background-color: rgb(255, 56, 56);
+}
+
 .admin_page .key_list .key_option .info span,
 .admin_page .key_list .key_option .input input,
 .admin_page .key_list .key_option .input button {

@@ -30,7 +30,7 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
   - [X] UI
   - [ ] route
   - [X] Add items
-  - [ ] Remove items
+  - [X] Remove items
   - [X] Change programs
   - [X] Change users data
   - [X] Add admin panel to frontend server routes

@@ -1,3 +1,7 @@
+// Wow this so bad code...
+// Yeah It's not the best I've ever written.
+// BUT IT WORKS! >:(
+
 import React, { Component }  from 'react';
 import getIcon from '../scripts/get_icon';
 import '../static/css/admin.css';
@@ -33,6 +37,7 @@ class Admin extends Component {
         this.getCurrentKeys = this.getCurrentKeys.bind(this);
         this.keyValueChange = this.keyValueChange.bind(this);
         this.newItem = this.newItem.bind(this);
+        this.deleteItem = this.deleteItem.bind(this);
         this.save = this.save.bind(this);
     }
 
@@ -108,6 +113,11 @@ class Admin extends Component {
             editingIsNew: true,
             editingIsObject: false,
         });
+    }
+
+    deleteItem() {
+        var obj = this.getCurrentKeys();
+        delete obj[this.state.editingKey];
     }
 
     save() {
@@ -201,6 +211,12 @@ class Admin extends Component {
                             </div>
                         </div>
                         <div>
+                            <button className="delete" onClick={ function() {
+                                ths.deleteItem();
+                                ths.setState({
+                                    editingIdx: -1,
+                                });
+                            } }>Delete</button>
                             <button onClick={ function() {
                                 ths.setState({
                                     editingIdx: -1,
