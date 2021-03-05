@@ -6,6 +6,7 @@ import React, { Component }  from 'react';
 import getIcon from '../scripts/get_icon';
 import '../static/css/admin.css';
 import $ from 'jquery';
+import { get } from '../scripts/server';
 
 
 class Admin extends Component {
@@ -42,7 +43,19 @@ class Admin extends Component {
     }
 
     componentDidMount() {
+        var ths = this;
 
+        get(
+            "/admin",
+            {},
+            function(data) {
+                if ('database' in data) {
+                    ths.setState({
+                        databaseObj: data['database'],
+                    });
+                }
+            }
+        );
     }
 
     getCurrentKeys() {

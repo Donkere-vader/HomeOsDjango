@@ -267,3 +267,16 @@ def action(request):
         return json_response({"succes": True})
 
     return json_response({"error": "Unknown action"})
+
+
+def admin(request):
+    user = check_auth(request)
+    if user is None:
+        return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+    if not user['admin']:
+        return json_response({"error": "You are no admin", "error_action": "redirect", "error_data": {"redirect": "/"}})
+
+    if request.method == "GET":
+        return json_response({"database": db.json_obj})
+
+    return json_response({"error": "Method not allowed"})

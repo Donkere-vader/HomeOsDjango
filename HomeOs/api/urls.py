@@ -12,4 +12,5 @@ urlpatterns = [
     path('action', views.action),
     path('event/new', views.event_new),
     path('event/delete', views.event_delete),
+    path('admin', views.admin),
 ]

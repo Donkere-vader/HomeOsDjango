@@ -28,9 +28,15 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 
 - [ ] Admin pannel
   - [X] UI
-  - [ ] route
+  - [X] route
+  - [X] Get database info from backend
+  - [ ] Save to backend
   - [X] Add items
   - [X] Remove items
   - [X] Change programs
   - [X] Change users data
   - [X] Add admin panel to frontend server routes
+
+- [ ] Messaging
+  - [ ] Error message in stead of alert()
+  - [ ] Message to notify the user
