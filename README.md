@@ -27,10 +27,10 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [X] Multiple device login
 
 - [ ] Admin pannel
-  - [ ] UI
+  - [X] UI
   - [ ] route
-  - [ ] Add items
+  - [X] Add items
   - [ ] Remove items
-  - [ ] Change programs
-  - [ ] Change users data
-  - [ ] Add admin panel to frontend server routes
+  - [X] Change programs
+  - [X] Change users data
+  - [X] Add admin panel to frontend server routes

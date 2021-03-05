@@ -10,4 +10,5 @@ urlpatterns = [
     path("events", views.index),
     path("event/<_>", views.index),
     path("actions", views.index),
+    path("admin", views.index),
 ]

@@ -1,43 +1,82 @@
-.admin_page .key_list .key_option, .admin_page .key_list .key_input {
+.admin_page .key_list .key_option {
     padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     border-bottom: 1px solid #424242;
     cursor: pointer;
+}
+
+.admin_page .key_list .key_option .info,
+.admin_page .key_list .key_option .input div {
+    display: flex;
+    align-items: center;
     gap: 10px;
+    justify-content: space-around;
+}
+
+.admin_page .key_list .key_option .input {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin_page .key_list .key_option .input button {
+    background-color: rgb(100, 100, 255);
+    color: #FFFFFF;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.admin_page .key_list .key_option .info span,
+.admin_page .key_list .key_option .input input,
+.admin_page .key_list .key_option .input button {
+    width: 100%;
 }
 
 .admin_page .key_list .key_option.new_item {
     justify-content: start;
 }
 
-.admin_page .key_list .key_option span, .admin_page .key_list .key_input span {
+.admin_page .key_list .key_option span,
+.admin_page .key_list p {
     font-size: 20px;
     font-weight: bold;
 }
 
-.admin_page .key_list .key_input input {
-    background: none;
-    border: none;
-    font-size: 18px;
-    padding: 5px;
-    color: #FFFFFF;
-    border-bottom: 2px solid orangered;
-    width: 100%;
+.admin_page .key_list .key_option .input .checkboxes p {
+    font-weight: normal;
+    font-size: 15px;
+}
+
+.admin_page .key_list .key_option.editing .info {
+    display: none;
+}
+
+.admin_page .key_list .key_option .input {
+    display: none;
+}
+
+.admin_page .key_list .key_option.editing .input {
+    display: flex;
+}
+
+.admin_page .key_list .key_option.editing {
+    background-color: rgba(95, 95, 255, 0.651);
 }
 
 .admin_page .key_list .key_option img {
     height: 25px;
 }
 
-.admin_page .key_list .key_option:hover {
-    background-color: #FFFFFF04;
-}
-
 .browse_header {
+    background-color: #424242;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 15px;
     padding: 10px 20px;
     border-bottom: 1px solid #424242;
 }
