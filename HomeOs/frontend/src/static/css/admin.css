@@ -5,6 +5,11 @@
     align-items: center;
     border-bottom: 1px solid #424242;
     cursor: pointer;
+    gap: 10px;
+}
+
+.admin_page .key_list .key_option.new_item {
+    justify-content: start;
 }
 
 .admin_page .key_list .key_option span, .admin_page .key_list .key_input span {
@@ -19,6 +24,7 @@
     padding: 5px;
     color: #FFFFFF;
     border-bottom: 2px solid orangered;
+    width: 100%;
 }
 
 .admin_page .key_list .key_option img {

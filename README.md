@@ -29,7 +29,8 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [ ] Admin pannel
   - [ ] UI
   - [ ] route
-  - [ ] Add/ remove devices
+  - [ ] Add items
+  - [ ] Remove items
   - [ ] Change programs
   - [ ] Change users data
   - [ ] Add admin panel to frontend server routes
