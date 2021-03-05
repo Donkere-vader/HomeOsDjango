@@ -25,7 +25,7 @@ function MobileMenu() {
             <div id="mobile_ul" style={{display: showing ? 'flex' : 'none'}} onClick={ function() {setShowing(!showing); } }>
                 <ul>
                     <li><Link className="no-link" to="/">Home</Link></li>
-                    <li><Link className="no-link" to="/programs">Programs</Link></li>
+                    <li><Link className="no-link" to="/actions">Actions</Link></li>
                     <li><Link className="no-link" to="/events">Events</Link></li>
                     <li><Link className="no-link" to="/logout">Logout</Link></li>
                 </ul>
