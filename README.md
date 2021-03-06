@@ -26,11 +26,11 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
   - [ ] Visual feedback for starting an action
 - [X] Multiple device login
 
-- [ ] Admin pannel
+- [X] Admin pannel
   - [X] UI
   - [X] route
   - [X] Get database info from backend
-  - [ ] Save to backend
+  - [X] Save to backend
   - [X] Array support
   - [X] Add items
   - [X] Remove items
