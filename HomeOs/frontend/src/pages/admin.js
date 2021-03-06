@@ -7,6 +7,7 @@ import getIcon from '../scripts/get_icon';
 import '../static/css/admin.css';
 import $ from 'jquery';
 import { get, post } from '../scripts/server';
+import arrayRemove from '../scripts/remove_array';
 
 
 class Admin extends Component {
@@ -31,11 +32,12 @@ class Admin extends Component {
             editingKey: "",
             editingValue: "",
             editingIsObject: "",
+            editingParentValueType: "",
         }
 
         this.valuesInDict = 0;
         
-        this.getCurrentKeys = this.getCurrentKeys.bind(this);
+        this.getCurrentKeys = this.getCurrentObj.bind(this);
         this.keyValueChange = this.keyValueChange.bind(this);
         this.newItem = this.newItem.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
@@ -58,7 +60,7 @@ class Admin extends Component {
         );
     }
 
-    getCurrentKeys() {
+    getCurrentObj() {
         var obj = this.state.databaseObj;
 
         this.state.path.forEach(function(path_item) {
@@ -69,12 +71,15 @@ class Admin extends Component {
     }
 
     keyValueChange(idx) {
+        console.log(idx);
         var key = $(`#key_input_${ idx }`).val();
 
         var value;
         var new_value;
-        if (this.state.editingIsObject) {
+        if (this.state.editingValueType === "dict") {
             value = {};
+        } else if (this.state.editingValueType === "array") {
+            value = [];
         } else {
             value = $(`#value_input_${ idx }`).val();
 
@@ -93,10 +98,13 @@ class Admin extends Component {
             value = new_value;
         }
 
-        var obj = this.getCurrentKeys();
+        var obj = this.getCurrentObj();
 
-        if (this.state.editingIsObject && typeof obj[this.state.editingKey] === "object") {
+        if ((this.state.editingValueType === "array" || this.state.editingValueType === "dict") && typeof obj[this.state.editingKey] === "object") {
             obj[key] = obj[this.state.editingKey];
+        } else if (this.state.editingParentValueType === "array") {
+            this.deleteItem();
+            obj.push(value);
         } else {
             obj[key] = value;
         }
@@ -107,7 +115,7 @@ class Admin extends Component {
     }
 
     newItem() {
-        var obj = this.getCurrentKeys();
+        var obj = this.getCurrentObj();
 
         var value = "";
         var key = "key";
@@ -117,20 +125,32 @@ class Admin extends Component {
             key = `key (${num})`;
         }
 
-        obj[key] = value;
+        if (this.state.editingParentValueType === "dict") {
+            obj[key] = value;
+        } else {
+            obj.push(key);
+        }
 
         this.setState({
             editingIdx: this.valuesInDict,
             editingKey: key,
             editingValue: value,
             editingIsNew: true,
-            editingIsObject: false,
+            editingValueType: "value",
         });
+
+        console.log(key);
+        console.log(obj);
     }
 
     deleteItem() {
-        var obj = this.getCurrentKeys();
-        delete obj[this.state.editingKey];
+        var obj = this.getCurrentObj();
+        
+        if (this.state.editingParentValueType === "dict") {
+            delete obj[this.state.editingKey];
+        } else if (this.state.editingParentValueType === "array") {
+            obj.splice(obj.indexOf(this.state.editingValue), 1);
+        }
     }
 
     save() {
@@ -150,20 +170,58 @@ class Admin extends Component {
         var key_list = [];
         var ths = this;
 
-        var keys = this.getCurrentKeys();
+        var obj = this.getCurrentObj();
+        var parentType;
+
+        if (obj.constructor === Array) {
+            parentType = "array";
+        } else if (obj.constructor === Object) {
+            parentType = "dict";
+        }
+
+        var values;
+        if (parentType === "array") {
+            values = obj;
+        } else if (parentType === "dict") {
+            values = Object.keys(obj);
+        }
 
         var idx = 0;
-        Object.keys(keys).forEach(function(k) {
-            var i = `${ths.state.path.join("")}${k}`;
+        values.forEach(function(k) {
+            var i;
+            if (parentType === "dict") {
+                i = `${ths.state.path.join("")}${k}`;
+            } else {
+                i = `${ths.state.path.join("")}${ idx }`;
+            }
 
             var key = k;
-            var value = keys[k];
-            var isObject = (typeof value === "object");
+
+            var value;
+            if (parentType === "dict") {
+                value = obj[k];
+
+                var valueType;
+
+                if (value.constructor === Array) {
+                    valueType = "array";
+                } else if (value.constructor === Object) {
+                    valueType = "dict";
+                } else {
+                    valueType = "value";
+                }
+            } else {
+                value = key;
+            }
+            
 
             if (ths.state.editingIdx === i) {
-                key = ths.state.editingKey;
                 value = ths.state.editingValue;
-                isObject = ths.state.editingIsObject;
+
+                if (parentType === "dict") {
+                    key = ths.state.editingKey;
+                    valueType = ths.state.editingValueType;
+                }
             }
 
             key_list.push(
@@ -179,17 +237,18 @@ class Admin extends Component {
                             editingIdx: i,
                             editingKey: key,
                             editingValue: value,
-                            editingIsObject: isObject,
+                            editingValueType: valueType,
+                            editingParentValueType: parentType,
                         });
                     }}>
-                        <span>{ key }</span>
-                        { !isObject && 
+                        <span>{ (parentType === "dict" ? key : value) }</span>
+                        { valueType === "value" && 
                             <p>=</p>
                         }
-                        { !isObject && 
+                        { valueType === "value" && 
                         <span>{ value.toString() }</span>
                         }
-                        { isObject && 
+                        { (valueType === "array" || valueType === "dict") && 
                         <img src={ getIcon("arrow_right", "white") } alt="" onClick={
                             function() {
                                 ths.state.path.push(key);
@@ -204,40 +263,54 @@ class Admin extends Component {
                     }
                     <div className="input">
                         <div>
-                            <input type="text" autoFocus id={ `key_input_${ i }` } defaultValue={ key } />
-                            { !isObject && 
+                            { parentType !== "array" && 
+                                <input type="text" autoFocus id={ `key_input_${ i }` } defaultValue={ key } />
+                            }
+                            { valueType === "value" && 
                                 <p>=</p>
                             }
-                            { !isObject &&
-                            <input type="text" id={ `value_input_${ i }` } defaultValue={ value } />
+                            { (valueType === "value" || parentType === "array") &&
+                                <input type="text" id={ `value_input_${ i }` } defaultValue={ value } />
                             }
                         </div>
-                        <div className="checkboxes">
-                            <div>
-                                <input type="radio" name={ `radio_${ i }` } id={ `checkbox_object_${ i }` } checked={ isObject } onChange={ function() {
-                                    ths.setState({
-                                        editingIsObject: true,
-                                        editingValue: {},
-                                    });
-                                }} />
-                                <p>Object</p>
-                            </div>
-                            <div>
-                                <input type="radio" name={ `radio_${ i }` } id={ `checkbox_value_${ i }` } checked={ !isObject } onChange={ function() {
-                                    ths.setState({
-                                        editingIsObject: false,
-                                        editingValue: "",
-                                    });
-                                }} />
-                                <p>Value</p>
-                            </div>
-                        </div>
+                        { parentType === "dict" && 
+                            <div className="checkboxes">
+                                <div>
+                                    <input type="radio" name={ `radio_${ i }` } id={ `checkbox_object_${ i }` } checked={ valueType === "dict"} onChange={ function() {
+                                        ths.setState({
+                                            editingValueType: "dict",
+                                            editingValue: {},
+                                        });
+                                    }} />
+                                    <p>Dict</p>
+                                </div>
+                                <div>
+                                    <input type="radio" name={ `radio_${ i }` } id={ `checkbox_value_${ i }` } checked={ valueType === "array"} onChange={ function() {
+                                        ths.setState({
+                                            editingValueType: "array",
+                                            editingValue: "",
+                                        });
+                                    }} />
+                                    <p>Array</p>
+                                </div>
+                                <div>
+                                    <input type="radio" name={ `radio_${ i }` } id={ `checkbox_value_${ i }` } checked={ valueType === "value"} onChange={ function() {
+                                        ths.setState({
+                                            editingValueType: "value",
+                                            editingValue: "",
+                                        });
+                                    }} />
+                                    <p>Value</p>
+                                </div>
+                            </div> 
+                        }
                         <div>
                             <button className="delete" onClick={ function() {
                                 ths.deleteItem();
                                 ths.setState({
                                     editingIdx: -1,
                                 });
+                                ths.save();
                             } }>Delete</button>
                             <button onClick={ function() {
                                 ths.setState({
@@ -260,7 +333,7 @@ class Admin extends Component {
         });
         this.valuesInDict = idx;
 
-        if (!("New key" in keys)) {
+        if (!("New key" in obj)) {
             key_list.push(
                 <div key={ idx } className="key_option new_item" onClick={ this.newItem }>
                     <div className="info">
@@ -280,7 +353,10 @@ class Admin extends Component {
                             path: [],
                         });
                     }}/>
-                    <span>{ `/${this.state.path.join("/")}` }</span>
+                    <div className="path_info">
+                        <span className="path">{ `/${this.state.path.join("/")}` }</span>
+                        <span>{ parentType }</span>
+                    </div>
                     <img src={ getIcon("arrow_left", "white") } alt="" onClick={ function() {
                         ths.state.path.splice(-1,1);
                         ths.setState({

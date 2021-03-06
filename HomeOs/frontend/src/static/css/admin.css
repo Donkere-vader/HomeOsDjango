@@ -82,10 +82,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: bold;
     font-size: 15px;
     padding: 10px 20px;
     border-bottom: 1px solid #424242;
+}
+
+.browse_header .path_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.browse_header .path_info .path {
+    font-weight: bold;
 }
 
 .browse_header img {
