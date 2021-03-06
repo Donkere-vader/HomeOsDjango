@@ -37,6 +37,9 @@
 .admin_page .key_list .key_option .input input,
 .admin_page .key_list .key_option .input button {
     width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .admin_page .key_list .key_option.new_item {
