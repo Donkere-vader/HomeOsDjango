@@ -31,6 +31,7 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
   - [X] route
   - [X] Get database info from backend
   - [ ] Save to backend
+  - [ ] Array support
   - [X] Add items
   - [X] Remove items
   - [X] Change programs

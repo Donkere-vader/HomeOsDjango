@@ -279,4 +279,9 @@ def admin(request):
     if request.method == "GET":
         return json_response({"database": db.json_obj})
 
+    if request.method == "POST":
+        db_obj = json.loads(request.POST['db_obj'])
+        print(json.dumps(db_obj, indent=4))
+        return json_response({"success": True})
+
     return json_response({"error": "Method not allowed"})

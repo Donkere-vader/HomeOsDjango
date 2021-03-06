@@ -6,7 +6,7 @@ import React, { Component }  from 'react';
 import getIcon from '../scripts/get_icon';
 import '../static/css/admin.css';
 import $ from 'jquery';
-import { get } from '../scripts/server';
+import { get, post } from '../scripts/server';
 
 
 class Admin extends Component {
@@ -134,7 +134,16 @@ class Admin extends Component {
     }
 
     save() {
-
+        console.log("saving");
+        post(
+            "/admin",
+            {
+                "db_obj": JSON.stringify(this.state.databaseObj),
+            },
+            function(data) {
+                console.log(data);
+            }
+        );
     }
 
     render() {
@@ -240,6 +249,7 @@ class Admin extends Component {
                                 ths.setState({
                                     editingIdx: -1,
                                 });
+                                ths.save();
                             } }>Ok</button>
                         </div>
                     </div>
@@ -265,7 +275,6 @@ class Admin extends Component {
             <div className="admin_page">
                 <div className="browse_header">
                     <img src={ getIcon("home", "white") } alt="" onClick={ function() {
-                        ths.save();
                         ths.setState({
                             editingIdx: -1,
                             path: [],
@@ -273,7 +282,6 @@ class Admin extends Component {
                     }}/>
                     <span>{ `/${this.state.path.join("/")}` }</span>
                     <img src={ getIcon("arrow_left", "white") } alt="" onClick={ function() {
-                        ths.save();
                         ths.state.path.splice(-1,1);
                         ths.setState({
                             editingIdx: -1,
