@@ -32,7 +32,7 @@ class Admin extends Component {
             editingKey: "",
             editingValue: "",
             editingIsObject: "",
-            editingParentValueType: "",
+            parentValueType: "",
         }
 
         this.valuesInDict = 0;
@@ -100,9 +100,9 @@ class Admin extends Component {
 
         var obj = this.getCurrentObj();
 
-        if ((this.state.editingValueType === "array" || this.state.editingValueType === "dict") && typeof obj[this.state.editingKey] === "object") {
+        if ((this.state.editingValueType === "array" || this.state.editingValueType === "dict") && obj[this.state.editingKey].constructor === this.state.editingValueType) {
             obj[key] = obj[this.state.editingKey];
-        } else if (this.state.editingParentValueType === "array") {
+        } else if (this.state.parentValueType === "array") {
             this.deleteItem();
             obj.push(value);
         } else {
@@ -125,7 +125,8 @@ class Admin extends Component {
             key = `key (${num})`;
         }
 
-        if (this.state.editingParentValueType === "dict") {
+        console.log("editingParentValueType", this.state.parentValueType);
+        if (this.state.parentValueType === "dict") {
             obj[key] = value;
         } else {
             obj.push(key);
@@ -146,9 +147,9 @@ class Admin extends Component {
     deleteItem() {
         var obj = this.getCurrentObj();
         
-        if (this.state.editingParentValueType === "dict") {
+        if (this.state.parentValueType === "dict") {
             delete obj[this.state.editingKey];
-        } else if (this.state.editingParentValueType === "array") {
+        } else if (this.state.parentValueType === "array") {
             obj.splice(obj.indexOf(this.state.editingValue), 1);
         }
     }
@@ -185,6 +186,8 @@ class Admin extends Component {
         } else if (parentType === "dict") {
             values = Object.keys(obj);
         }
+
+        this.state.parentValueType = parentType;
 
         var idx = 0;
         values.forEach(function(k) {
@@ -288,7 +291,7 @@ class Admin extends Component {
                                     <input type="radio" name={ `radio_${ i }` } id={ `checkbox_value_${ i }` } checked={ valueType === "array"} onChange={ function() {
                                         ths.setState({
                                             editingValueType: "array",
-                                            editingValue: "",
+                                            editingValue: [],
                                         });
                                     }} />
                                     <p>Array</p>
@@ -355,7 +358,7 @@ class Admin extends Component {
                     }}/>
                     <div className="path_info">
                         <span className="path">{ `/${this.state.path.join("/")}` }</span>
-                        <span>{ parentType }</span>
+                        <span>{ this.state.parentValueType }</span>
                     </div>
                     <img src={ getIcon("arrow_left", "white") } alt="" onClick={ function() {
                         ths.state.path.splice(-1,1);

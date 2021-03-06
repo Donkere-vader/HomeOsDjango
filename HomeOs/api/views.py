@@ -281,7 +281,8 @@ def admin(request):
 
     if request.method == "POST":
         db_obj = json.loads(request.POST['db_obj'])
-        print(json.dumps(db_obj, indent=4))
-        return json_response({"success": True})
+        db.json_obj = db_obj
+        db.commit()
+        return json_response({"message": "Saved"})
 
     return json_response({"error": "Method not allowed"})
