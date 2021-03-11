@@ -1,0 +1,19 @@
+#message {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px;
+    border-radius: 3px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #FFFFFF;
+}
+
+.error {
+    background-color: #ff3535;
+}
+
+.message {
+    background-color: #8bc34a;
+}

@@ -47,6 +47,7 @@ function App() {
         {/* Index */}
         <Route path="/" component={ Index } />
       </Switch>
+      <div id="message_cointaner"></div>
     </Router>
   );
 }

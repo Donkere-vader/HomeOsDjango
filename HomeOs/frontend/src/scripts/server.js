@@ -1,6 +1,6 @@
 import $ from 'jquery';
+import { showMessage } from '../components/message';
 import { getAuthData } from '../scripts/auth';
-
 
 const API_URL = "http://localhost:8000/api";
 
@@ -17,7 +17,7 @@ function post(url, user_data, handler, authenticated=true) {
         data,
         function(data) {
             if ('error' in data && data['error']) {
-                alert(data['error']);
+                showMessage(data['error'], true);
 
                 if ('error_action' in data) {
                     var action = data['error_action'];
