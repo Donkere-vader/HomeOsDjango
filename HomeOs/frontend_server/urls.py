@@ -11,4 +11,5 @@ urlpatterns = [
     path("event/<_>", views.index),
     path("actions", views.index),
     path("admin", views.index),
+    path("register", views.index),
 ]
