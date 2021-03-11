@@ -24,10 +24,13 @@ class RegisterPage extends Component {
 
         if (password !== password_confirm) {
             this.setState({form_error: "Passwords don't match"});
+            return;
         } else if (password.length < 4) {
             this.setState({form_error: "Password must be at least 4 characters"});
+            return;
         } else if (username.length < 3) {
             this.setState({form_error: "username must be at least 3 characters"});
+            return;
         }
 
         var ths = this;
