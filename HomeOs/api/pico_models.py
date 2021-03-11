@@ -3,6 +3,8 @@ import bcrypt
 from .functions import random_string
 from .constants import DATETIME_STRING_FORMAT
 from datetime import datetime as dt
+import requests
+import json
 
 
 class PicoModel:
@@ -78,11 +80,16 @@ class Device(PicoModel):
     private_fields = ["address"]
 
     def action(self, action, action_data):
-        response = {
-            "active": True,
-            "color": "FFFF00",
-            "active_program": "program_one_id",
-        }
+        req = requests.post(
+            f"{self['address']}/api/",
+            {
+                "action": action,
+                "action_data": json.dumps(action_data),
+                "apikey": self['apikey'],
+            }
+        )
+
+        response = json.loads(req.content)
 
         keys = ["color", "active", "active_program"]
 

@@ -45,6 +45,6 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [X] arrayRemove is defined but never used admn.js:10:8
 - [X] Do not mutate state directly. Use SetState() admin.js:190:9
 - [ ] Allow API calls to routes
-- [ ] Do the actual device call
+- [X] Do the actual device call
 - [ ] Add register page to frontend_server routes
 - [ ] Don't add user when passwords don't match
