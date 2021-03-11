@@ -7,7 +7,6 @@ import getIcon from '../scripts/get_icon';
 import '../static/css/admin.css';
 import $ from 'jquery';
 import { get, post } from '../scripts/server';
-import arrayRemove from '../scripts/remove_array';
 
 
 class Admin extends Component {
@@ -187,6 +186,8 @@ class Admin extends Component {
             values = Object.keys(obj);
         }
 
+        // Must ignore otherwise it will end up in a infinite render loop
+        // eslint-disable-next-line
         this.state.parentValueType = parentType;
 
         var idx = 0;
