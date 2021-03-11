@@ -48,4 +48,4 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [X] Do the actual device call
 - [X] Add register page to frontend_server routes
 - [X] Don't add user when passwords don't match
-- [ ] Rename button on register page to register in stead of 'login'
+- [X] Rename button on register page to register in stead of 'login'

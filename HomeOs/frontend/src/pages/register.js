@@ -75,7 +75,7 @@ class RegisterPage extends Component {
     
                     <div style={{height: "20px"}}></div>
     
-                    <button className="submit" onClick={ this.register }>Login</button>
+                    <button className="submit" onClick={ this.register }>Register</button>
                 </div>
             </main>
         )
