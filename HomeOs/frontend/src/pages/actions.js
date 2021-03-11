@@ -1,6 +1,7 @@
 import React,  { Component } from 'react';
 import { post } from '../scripts/server';
 import '../static/css/actions.css';
+import $ from 'jquery';
 
 class Actions extends Component {
     constructor(props) {
@@ -34,7 +35,16 @@ class Actions extends Component {
                 "event_id": event_id,
             },
             function(data) {
-                console.log(data);
+                if ('succes' in data && data['succes']) {
+                    var miliseconds = 1000;
+
+                    $(`#event_card_${event_id}`).css({"animation": ""});
+                    $(`#event_card_${event_id}`).css("animation", `${miliseconds}ms trigger`);
+
+                    setTimeout(function() {
+                        $(`#event_card_${event_id}`).css({"animation": ""});
+                    }, miliseconds);
+                }
             }
         );
     }
