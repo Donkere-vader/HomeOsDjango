@@ -20,7 +20,7 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [X] Get device programs from device on device start
 - [X] Template database on first start (Lol already did that appareantly)
 - [X] Register for new users
-- [ ] Set up actions ( previously programs )
+- [X] Set up actions ( previously programs )
   - [X] Find a way to do it
   - [X] Implement it
   - [ ] Visual feedback for starting an action
@@ -50,3 +50,6 @@ Yes... The old one is written using Flask. This time i'm doing it with Django an
 - [X] Don't add user when passwords don't match
 - [X] Rename button on register page to register in stead of 'login'
 - [X] Visual feedback on action trigger
+
+- [ ] Array or dict gets purged on name change (admin panel)
+- [ ] Select action not (always) working
