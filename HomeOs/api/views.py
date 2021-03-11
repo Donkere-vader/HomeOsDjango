@@ -79,7 +79,7 @@ def devices(request):
 
     devices = {}
 
-    if user['admin']:
+    if user == "api" or user['admin']:
         devices_list = db['device']
     else:
         devices_list = user['devices']
@@ -106,7 +106,7 @@ def dev(request):
     if request.method == "GET":
         device_id = request.GET['device_id']
 
-        if device_id in db['user'][user.id]['devices'] or user['admin']:
+        if user == "api" or device_id in db['user'][user.id]['devices'] or user['admin']:
             device = Device(device_id, db['device'][device_id])
 
             return json_response(device.serialize(
@@ -127,7 +127,7 @@ def dev(request):
         action = request.POST['action']
         action_data = json.loads(request.POST['action_data'])
 
-        if device_id in user['devices'] or user['admin']:
+        if user == "api" or device_id in user['devices'] or user['admin']:
             device = Device(device_id, db['device'][device_id])
 
             error, response = device.action(action, action_data)
@@ -144,7 +144,7 @@ def events(request):
 
     events = {}
 
-    if user['admin']:
+    if user == "api" or user['admin']:
         events_list = db['event']
     else:
         events_list = user['events']
@@ -169,7 +169,7 @@ def event(request):
     if request.method == "GET":
         event_id = request.GET['event_id']
 
-        if event_id in user['events'] or user['admin']:
+        if user == "api" or event_id in user['events'] or user['admin']:
             event = Event(event_id, db['event'][event_id])
             return json_response(event.serialize())
 
@@ -180,7 +180,7 @@ def event(request):
         action = request.POST['action']
         action_data = json.loads(request.POST['action_data'])
 
-        if event_id in user['events'] or user['admin']:
+        if user == "api" or event_id in user['events'] or user['admin']:
             event = Event(event_id, db['event'][event_id])
 
             error, response = event.action(action, action_data)
@@ -194,6 +194,9 @@ def event_new(request):
     user = check_auth(request)
     if user is None:
         return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
+    if user == "api":
+        return json_response({"error": "Can't create new events from API"})
 
     if request.method == "POST":
         error, new_event = Event.new()
@@ -213,6 +216,9 @@ def event_delete(request):
     user = check_auth(request)
     if user is None:
         return json_response({"error": "You are not logged in", "error_action": "redirect", "error_data": {"redirect": "/login"}})
+
+    if user == "api":
+        return json_response({"error": "Can't delete event from API"})
 
     if request.method == "POST":
         event_id = request.POST['event_id']
@@ -254,7 +260,7 @@ def action(request):
 
     event_id = request.POST['event_id']
 
-    if event_id in db['event'] and (event_id in user['events'] or user['admin']):
+    if user == "api" or (event_id in db['event'] and (event_id in user['events'] or user['admin'])):
         event = Event(event_id, db['event'][event_id])
 
         for device_id in event['devices']:
